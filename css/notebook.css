@@ -287,22 +287,10 @@
 
 /* ---------- headings write themselves ---------- */
 h2 .handwriting { display: inline-block; vertical-align: baseline; height: 1.25em; width: auto; overflow: visible; }
-h2 .handwriting path { fill: var(--marker-blue); fill-opacity: 0; stroke: var(--marker-blue); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
-h2 .handwriting path.ink { animation: trace 120ms linear forwards, inkfill 120ms linear forwards; animation-delay: 0ms, 100ms; }
-@keyframes trace { to { stroke-dashoffset: 0; } }
-@keyframes inkfill { to { fill-opacity: 1; } }
-.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; filter: drop-shadow(2px 4px 3px rgba(0,0,0,.35)); }
+h2 .handwriting path { fill: var(--marker-blue); }
+.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; filter: drop-shadow(3px 6px 4px rgba(0,0,0,.35)); }
 .nib.show { opacity: 1; }
 .nib.lift { transition: transform .45s ease-in, opacity .45s; transform: translate(0, 0) !important; opacity: 0; }
-
-/* ---------- the desk lamp ---------- */
-.lamp-glow { position: absolute; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: soft-light; will-change: background-position;
-  background: radial-gradient(640px 520px at var(--lx, 70%) var(--ly, 10%), rgba(255,248,225,.42), rgba(255,246,220,.12) 50%, rgba(0,0,0,.08) 100%); }
-html.lamp .clip { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow), 0 1px 2px rgba(0,0,0,.1); }
-html.lamp .tag.big { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow), 0 0 0 1px rgba(0,0,0,.05); }
-html.lamp .postit { box-shadow: var(--sx, 4px) var(--sy, 10px) var(--sd, 16px) var(--shadow); }
-html.lamp .card { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow); }
-html.lamp .device { box-shadow: var(--sx, 0) var(--sy, 16px) calc(var(--sd, 30px) + 8px) rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 0 rgba(0,0,0,.4); }
 
 /* ---------- paper that lifts ---------- */
 .clip { transform-style: preserve-3d; transition: transform .35s ease-out, box-shadow .35s ease-out; }

@@ -3,16 +3,17 @@
  *
  * The heading text is re-set as SVG from the real glyph outlines of Permanent
  * Marker (the font file in /fonts, parsed in the browser with opentype.js).
- * A pen nib traces each glyph, the glyph fills in, and when the last letter
- * is done the underline sketch beneath the heading is drawn. If the font or
+ * Each glyph is revealed left to right behind a moving clip, the way a marker
+ * lays down a letter, with the marker tip travelling along; when the last
+ * letter is done the underline sketch beneath the heading is drawn. If the font or
  * the parser fails to load, the headings stay as plain text and the
  * underlines draw on their own.
  */
 
 const FONT_URL = 'fonts/PermanentMarker-Regular.ttf';
 const PARSER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js';
-const GLYPH_MS = 70; // pace: one letter every 70 ms
-const TRACE_MS = 120; // how long a letter's outline takes to be traced
+const GLYPH_MS = 150; // pace: one letter every 150 ms
+let clipCounter = 0;
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -42,16 +43,34 @@ function buildHeading(font, h2) {
   svg.setAttribute('role', 'img');
   svg.setAttribute('aria-label', text);
 
+  const NS = 'http://www.w3.org/2000/svg';
+  const defs = document.createElementNS(NS, 'defs');
+  svg.appendChild(defs);
   const glyphs = [];
   let x = 2;
   for (const glyph of font.stringToGlyphs(text)) {
-    const d = glyph.getPath(x, baseline, size).toPathData(2);
-    x += (glyph.advanceWidth / font.unitsPerEm) * size;
+    const advance = (glyph.advanceWidth / font.unitsPerEm) * size;
+    const x0 = x;
+    x += advance;
+    const path2d = glyph.getPath(x0, baseline, size);
+    const d = path2d.toPathData(2);
     if (!d) continue;
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const box = path2d.getBoundingBox();
+    const id = `hw-clip-${clipCounter++}`;
+    const clip = document.createElementNS(NS, 'clipPath');
+    clip.setAttribute('id', id);
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', box.x1 - 2);
+    rect.setAttribute('y', 0);
+    rect.setAttribute('width', 0);
+    rect.setAttribute('height', height);
+    clip.appendChild(rect);
+    defs.appendChild(clip);
+    const path = document.createElementNS(NS, 'path');
     path.setAttribute('d', d);
+    path.setAttribute('clip-path', `url(#${id})`);
     svg.appendChild(path);
-    glyphs.push(path);
+    glyphs.push({ rect, x0: box.x1 - 2, w: box.x2 - box.x1 + 4, y: baseline - size * 0.4 });
   }
   h2.replaceChild(svg, textNode);
   h2.classList.add('writing');
@@ -61,32 +80,28 @@ function buildHeading(font, h2) {
 function makeNib() {
   const nib = document.createElement('div');
   nib.className = 'nib';
-  nib.innerHTML = '<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M6 28 L 9 19 L 25 3 L 31 9 L 15 25 Z" fill="#35342f"/><path d="M6 28 L 9 19 L 15 25 Z" fill="#c9bfae"/></svg>';
+  nib.innerHTML = '<svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><path d="M14 44 L 22 26 L 44 4 L 52 12 L 30 34 Z" fill="#24437a"/><path d="M14 44 L 22 26 L 30 34 Z" fill="#c9bfae"/><path d="M44 4 L 52 12 L 48 16 L 40 8 Z" fill="#1a2f55"/></svg>';
   document.body.appendChild(nib);
   return nib;
 }
 
 function write({ svg, glyphs, underline }) {
   const nib = makeNib();
-  glyphs.forEach((p) => p.style.setProperty('--len', p.getTotalLength().toFixed(1)));
-  let i = 0;
   const start = performance.now();
   nib.classList.add('show');
 
   function tick(now) {
-    const target = Math.min(glyphs.length, Math.floor((now - start) / GLYPH_MS) + 1);
-    while (i < target) glyphs[i++].classList.add('ink');
-    const current = glyphs[i - 1];
-    if (current) {
-      const len = parseFloat(current.style.getPropertyValue('--len'));
-      const t = Math.min(1, ((now - start) % GLYPH_MS) / GLYPH_MS);
-      const pt = current.getPointAtLength(len * t);
-      const r = svg.getBoundingClientRect();
-      const scale = r.width / svg.viewBox.baseVal.width;
-      nib.style.transform = `translate(${r.left + pt.x * scale - 6}px, ${r.top + pt.y * scale - 28 + window.scrollY}px)`;
-    }
-    if (i < glyphs.length) requestAnimationFrame(tick);
+    const elapsed = now - start;
+    const index = Math.min(glyphs.length - 1, Math.floor(elapsed / GLYPH_MS));
+    const t = Math.min(1, (elapsed - index * GLYPH_MS) / GLYPH_MS);
+    glyphs.forEach((g, k) => g.rect.setAttribute('width', k < index ? g.w : k === index ? g.w * t : 0));
+    const g = glyphs[index];
+    const r = svg.getBoundingClientRect();
+    const scale = r.width / svg.viewBox.baseVal.width;
+    nib.style.transform = `translate(${r.left + (g.x0 + g.w * t) * scale - 14}px, ${r.top + g.y * scale - 44 + window.scrollY}px)`;
+    if (elapsed < glyphs.length * GLYPH_MS) requestAnimationFrame(tick);
     else {
+      glyphs.forEach((gl) => gl.rect.setAttribute('width', gl.w));
       if (underline) underline.classList.add('on');
       nib.classList.add('lift');
       setTimeout(() => nib.remove(), 600);

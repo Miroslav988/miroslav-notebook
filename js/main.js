@@ -5,7 +5,6 @@ import { createTerminal } from './terminal.js';
 import { initEggGame } from './egg.js';
 import { initLisp } from './repl.js';
 import { initSecret } from './secret.js';
-import { initLamp } from './lamp.js';
 import { initPaper } from './paper.js';
 import { writeHeadings } from './handwriting.js';
 
@@ -19,6 +18,5 @@ initSecret(ink);
 const terminal = createTerminal();
 initEggGame(terminal);
 initLisp(terminal);
-initLamp(sheet);
 initPaper();
 writeHeadings();
