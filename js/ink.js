@@ -163,6 +163,16 @@ export function createInk(sheet) {
     else if (ev.key.toLowerCase() === 'z' && !ev.metaKey && !ev.ctrlKey) undo();
   });
 
+  // On small screens the pencil case starts folded into one button.
+  const pencilCase = document.getElementById('pencilcase');
+  const toggle = document.getElementById('pencilcase-toggle');
+  toggle.addEventListener('click', () => {
+    const open = pencilCase.classList.toggle('collapsed') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? '×' : '✎';
+    if (!open && tool) setTool(tool);
+  });
+
   new ResizeObserver(resize).observe(sheet);
   resize();
 
