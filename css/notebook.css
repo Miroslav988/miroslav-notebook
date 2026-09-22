@@ -121,7 +121,8 @@
   .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px 40px; align-items: start; }
   .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
   .chart .cap { margin-top: 6px; font-size: 21px; }
-  .draw path.stroke { stroke-dasharray: var(--len, 1000); stroke-dashoffset: var(--len, 1000); }
+  .draw path.stroke { stroke-dasharray: var(--len, 1000); stroke-dashoffset: var(--len, 1000); opacity: 0; } /* round caps would show a dot before the line is drawn */
+  .draw.on path.stroke { opacity: 1; }
   .draw.on path.stroke { animation: draw 1.4s ease-out forwards; animation-delay: var(--d, 0s); }
   .draw .bar { transform-origin: 50% 178px; transform: scaleY(0); }
   .draw.on .bar { animation: grow .9s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: var(--d, 0s); }
@@ -273,7 +274,7 @@
     .hint { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); font-size: 17px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .draw path.stroke { stroke-dashoffset: 0 !important; animation: none !important; }
+    .draw path.stroke { stroke-dashoffset: 0 !important; animation: none !important; opacity: 1 !important; }
     .draw .bar { transform: none !important; animation: none !important; } .draw .lbl { opacity: 1 !important; animation: none !important; }
     .tag, .postit, .tool, .item { transition: none !important; }
   }
