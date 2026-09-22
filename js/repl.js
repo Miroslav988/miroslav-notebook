@@ -59,27 +59,25 @@ export function initLisp(terminal) {
     terminal.lcd.append(canvas, pane);
     fit();
     resizer = new ResizeObserver(fit);
-    resizer.observe(terminal.lcd);
+    resizer.observe(terminal.lcd.parentElement);
     terminal.enterMode(evaluate, KEYS_HTML, pane);
     say('λ ready. (help) for the tour, exit to leave.');
     terminal.input.placeholder = '(repeat 36 (fd 90) (rt 170))';
   }
 
-  // The canvas takes the LCD minus one line of output, keeping its aspect.
+  // The canvas spans the LCD's width and keeps its aspect; the LCD grows to fit.
   function fit() {
     if (!canvas) return;
     const style = getComputedStyle(terminal.lcd);
     const innerW = terminal.lcd.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-    const innerH = terminal.lcd.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom) - pane.offsetHeight - 6;
-    const w = Math.min(innerW, innerH * (W / H));
-    canvas.style.width = `${Math.floor(w)}px`;
-    canvas.style.height = `${Math.floor(w * (H / W))}px`;
+    canvas.style.width = `${Math.floor(innerW)}px`;
+    canvas.style.height = `${Math.floor(innerW * (H / W))}px`;
   }
 
-  // One line under the drawing: the latest result, error or note.
+  // Two lines under the drawing: the latest results, errors or notes.
   function say(text, cls) {
-    pane.innerHTML = '';
     terminal.print(text, cls);
+    while (pane.children.length > 2) pane.firstChild.remove();
   }
 
   function leave() {

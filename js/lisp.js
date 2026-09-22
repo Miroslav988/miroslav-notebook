@@ -309,9 +309,9 @@ export function createTurtle(ctx, width, height) {
 
 export const DEMOS = {
   star: '(cs) (repeat 36 (fd 90) (rt 170))',
-  spiral: '(cs) (define (spiral n) (if (< n 120) (begin (fd n) (rt 89) (spiral (+ n 2))))) (spiral 2)',
-  tree: '(cs) (pu) (goto 0 -95) (pd) (define (tree len) (if (> len 6) (begin (fd len) (rt 25) (tree (* len 0.72)) (lt 50) (tree (* len 0.72)) (rt 25) (bk len)))) (tree 60)',
-  flower: '(cs) (repeat 12 (repeat 4 (fd 40) (rt 90)) (rt 30))',
+  spiral: '(cs) (define (spiral n) (if (< n 68) (begin (fd n) (rt 89) (spiral (+ n 1.5))))) (spiral 2)',
+  tree: '(cs) (pu) (goto 0 -72) (pd) (define (tree len) (if (> len 4) (begin (fd len) (rt 25) (tree (* len 0.72)) (lt 50) (tree (* len 0.72)) (rt 25) (bk len)))) (tree 40)',
+  flower: '(cs) (repeat 12 (repeat 4 (fd 36) (rt 90)) (rt 30))',
   fib: '(define (fib n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2))))) (map fib (range 0 15))',
 };
 

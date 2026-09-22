@@ -7,7 +7,7 @@ import { initLisp } from './repl.js';
 import { initSecret } from './secret.js';
 import { initLamp } from './lamp.js';
 import { initPaper } from './paper.js';
-import { writeIntro } from './handwriting.js';
+import { writeHeadings } from './handwriting.js';
 
 const sheet = document.getElementById('sheet');
 
@@ -21,4 +21,4 @@ initEggGame(terminal);
 initLisp(terminal);
 initLamp(sheet);
 initPaper();
-writeIntro();
+writeHeadings();

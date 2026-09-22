@@ -7,10 +7,10 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## What's on the page
 
-- **The intro writes itself.** On load the first two paragraphs are re-set as SVG from the real glyph
-  outlines of Caveat (the font file is parsed in the browser with opentype.js), wrapped to the paragraph
-  width using the font's own advance widths. Each glyph is traced by a pen nib, then filled. If the font
-  or the parser fails, the plain text simply stays.
+- **Headings write themselves.** As a section scrolls into view its heading is re-set as SVG from the
+  real glyph outlines of Permanent Marker (the font file is parsed in the browser with opentype.js), a
+  pen nib traces each letter, and the sketched underline is drawn once the last letter is done. If the
+  font or the parser fails, the plain headings stay.
 - **A desk lamp.** The light follows the pointer (or the phone's tilt), and everything on the paper casts
   its shadow away from it: printouts, the sticker, sticky notes, the terminal, the pencil. The paper is
   a touch brighter under the lamp.
@@ -49,10 +49,10 @@ js/lisp.js          the Lisp: reader, evaluator, builtins, turtle
 js/repl.js          the `lisp` command: REPL mode and the turtle canvas
 js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
-js/handwriting.js   the intro written glyph by glyph from the font's outlines
+js/handwriting.js   headings written glyph by glyph from the font's outlines
 js/lamp.js          the desk lamp: light position → shadow vectors
 js/paper.js         printouts that lift towards the pointer
-fonts/              Caveat (SIL Open Font License), parsed at runtime
+fonts/              Permanent Marker (Apache 2.0) and Caveat (OFL), with licenses
 ```
 
 ## Run locally

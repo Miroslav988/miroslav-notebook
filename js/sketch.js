@@ -22,7 +22,10 @@ export function initSketch() {
     },
     { threshold: 0.2 },
   );
-  document.querySelectorAll('.draw').forEach((el) => observer.observe(el));
+  // heading underlines are triggered by handwriting.js once the heading is written
+  document.querySelectorAll('.draw').forEach((el) => {
+    if (!el.matches('h2 .ul')) observer.observe(el);
+  });
 
   document.querySelectorAll('.doodle svg, .note-margin svg').forEach((svg) => {
     const outlined = [...svg.querySelectorAll('path, rect, circle, line')].filter(

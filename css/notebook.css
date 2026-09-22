@@ -218,9 +218,10 @@
   .facts p { font-size: 21px; }
   .facts b { color: var(--marker-blue); font-weight: 600; }
   .lcd canvas.game { display: block; height: 100%; width: auto; max-width: 100%; margin: 0 auto; }
-  .lcd.repl { display: flex; flex-direction: column; align-items: center; padding: 8px 12px 6px; overflow: hidden; }
+  .lcd.repl { display: flex; flex-direction: column; align-items: center; padding: 8px 12px 6px; overflow: hidden; height: auto; }
   .lcd.repl canvas.turtle { display: block; flex: 0 0 auto; }
-  .lcd .repl-out { flex: 0 0 auto; width: 100%; height: 1.3em; line-height: 1.3; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; border-top: 1px dashed rgba(28,42,30,.35); margin-top: 4px; padding-top: 2px; }
+  .lcd .repl-out { flex: 0 0 auto; width: 100%; height: 2.6em; line-height: 1.3; overflow: hidden; border-top: 1px dashed rgba(28,42,30,.35); margin-top: 4px; padding-top: 2px; }
+  .lcd .repl-out div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .device .keys.mode .key { font-family: 'VT323', monospace; font-size: 20px; letter-spacing: .5px; }
   .lcd.playing { padding: 8px; overflow: hidden; display: flex; justify-content: center; }
   .device .keys.game { grid-template-columns: 96px 96px 1fr 96px 96px; grid-template-rows: 54px 54px; gap: 10px; max-width: 640px; margin-inline: auto; }
@@ -283,17 +284,15 @@
 /* mobile: the REPL canvas stays inside the LCD */
 .device { position: relative; z-index: 21; }
 
-/* ---------- the intro writes itself ---------- */
-.intro p.writing { position: relative; }
-.handwriting { display: block; max-width: 100%; height: auto; overflow: visible; }
-.handwriting .hl { fill: var(--highlight); opacity: .85; }
-.handwriting path { fill-opacity: 0; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
-.handwriting path.ink { animation: trace var(--dur, 90ms) linear forwards, inkfill 140ms linear forwards; animation-delay: 0ms, var(--dur, 90ms); }
+/* ---------- headings write themselves ---------- */
+h2 .handwriting { display: inline-block; vertical-align: baseline; height: 1.25em; width: auto; overflow: visible; }
+h2 .handwriting path { fill: var(--marker-blue); fill-opacity: 0; stroke: var(--marker-blue); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
+h2 .handwriting path.ink { animation: trace 120ms linear forwards, inkfill 120ms linear forwards; animation-delay: 0ms, 100ms; }
 @keyframes trace { to { stroke-dashoffset: 0; } }
 @keyframes inkfill { to { fill-opacity: 1; } }
-.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .25s; filter: drop-shadow(2px 4px 3px rgba(0,0,0,.35)); }
+.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; filter: drop-shadow(2px 4px 3px rgba(0,0,0,.35)); }
 .nib.show { opacity: 1; }
-.nib.lift { transition: transform .5s ease-in, opacity .5s; transform: translate(0, 0) !important; opacity: 0; }
+.nib.lift { transition: transform .45s ease-in, opacity .45s; transform: translate(0, 0) !important; opacity: 0; }
 
 /* ---------- the desk lamp ---------- */
 .lamp-glow { position: absolute; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: soft-light;
@@ -315,3 +314,6 @@ html.lamp .clip, html.lamp .tag.big, html.lamp .postit, html.lamp .card, html.la
 .tag.big::after { content: ""; position: absolute; right: 0; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 0; border-color: transparent; transition: border-width .3s ease-out; }
 .tag.big:hover::after { border-width: 0 0 26px 26px; border-color: transparent transparent #f5f1e6 #e2ddd0; box-shadow: -3px -3px 6px rgba(0,0,0,.15); }
 @media (prefers-reduced-motion: reduce) { .clip:hover { transform: none !important; } }
+
+/* REPL mode: the LCD fits the drawing plus two lines on every screen size */
+.device .lcd.repl { height: auto; }
