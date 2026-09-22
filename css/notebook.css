@@ -1,0 +1,266 @@
+/*
+ * Miroslav's Notebook — page styles.
+ *
+ * One visual world, on purpose: lined paper on a dark desk, so there is no dark
+ * theme. Handwriting (Caveat) for notes, marker (Permanent Marker) for headings
+ * and the sticker, typewriter (Special Elite) for the taped-in printouts.
+ */
+
+:root {
+    --paper: #f5f1e6;
+    --line: #c3cfdb;
+    --margin: #d98b86;
+    --graphite: #35342f;
+    --graphite-soft: #6d6a61;
+    --sticker-red: #b8392e;
+    --marker-blue: #24437a;
+    --marker-green: #3d7a55;
+    --highlight: #f4e27a;
+    --tape: rgba(232, 216, 170, .7);
+    --postit: #f3e9a8;
+    --postit-2: #d3e6cf;
+    --postit-4: #d8d9ea;
+    --ink: #24437a;
+    --shadow: rgba(40, 30, 10, .2);
+    --desk: #4a4540;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--desk); }
+  body {
+    margin: 0; color: var(--graphite);
+    font-family: "Caveat", "Patrick Hand", "Comic Sans MS", cursive;
+    font-size: 22px; line-height: 1.35;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(255,240,215,.14), transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(0,0,0,.35), transparent 50%),
+      var(--desk);
+    padding: 28px 16px 90px;
+    overflow-x: hidden;
+  }
+  .sheet {
+    position: relative; max-width: 960px; margin: 0 auto;
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+      repeating-linear-gradient(to bottom, transparent 0 31px, var(--line) 31px 32px),
+      var(--paper);
+    background-position: 0 0, 0 14px, 0 0;
+    box-shadow: 0 30px 60px rgba(0,0,0,.42), 0 4px 10px rgba(0,0,0,.2), 0 2px 0 #e9e2cf inset;
+    padding: 56px 40px 60px 84px; border-radius: 3px;
+  }
+  .sheet::before { content: ""; position: absolute; top: 0; bottom: 0; left: 62px; width: 2px; background: var(--margin); opacity: .8; }
+  .sheet::after {
+    content: ""; position: absolute; top: 90px; bottom: 90px; left: 22px; width: 18px;
+    background: radial-gradient(circle at 9px 9px, #5f5243 0 8px, transparent 9px) 0 0 / 18px 220px repeat-y;
+    filter: drop-shadow(0 1px 0 rgba(255,255,255,.6));
+  }
+  section { position: relative; margin: 0 0 76px; }
+  h1, h2, h3 { font-weight: 600; margin: 0; text-wrap: balance; }
+  h2 {
+    font-family: "Permanent Marker", "Caveat", cursive; font-weight: 400; font-size: 34px; color: var(--marker-blue);
+    margin: 0 0 22px; letter-spacing: .5px; transform: rotate(-1.2deg); display: inline-block; position: relative;
+  }
+  h2 .ul { position: absolute; left: -6px; right: -10px; bottom: -10px; height: 14px; overflow: visible; }
+  h2 .ul path { stroke: var(--graphite-soft); stroke-width: 3; fill: none; stroke-linecap: round; }
+  p { margin: 0 0 12px; max-width: 62ch; }
+  a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--ink); }
+  a:hover, a:focus-visible { background: var(--highlight); outline: none; }
+  a:focus-visible { outline: 3px solid var(--marker-blue); outline-offset: 2px; }
+  mark { background: linear-gradient(104deg, transparent 2%, var(--highlight) 4%, var(--highlight) 96%, transparent 98%); padding: 0 4px; color: inherit; border-radius: 2px; }
+  .pencil { color: var(--graphite-soft); font-size: 19px; }
+  .wobble { text-decoration: underline wavy var(--sticker-red); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+
+/* ---------- HELLO my name is sticker ---------- */
+  .tag {
+    display: inline-flex; flex-direction: column; align-items: center; background: #fff; border-radius: 14px;
+    box-shadow: 0 10px 22px var(--shadow), 0 0 0 1px rgba(0,0,0,.05);
+    overflow: hidden; text-align: center; position: relative;
+  }
+  .tag .top { background: var(--sticker-red); color: #fff; width: 100%; font-family: "Patrick Hand", "Caveat", cursive; letter-spacing: .5px; line-height: 1; }
+  .tag .top b { display: block; font-family: "Permanent Marker", cursive; font-weight: 400; }
+  .tag .top small { display: block; font-size: .42em; letter-spacing: .3px; opacity: .95; }
+  .tag .name { font-family: "Permanent Marker", "Caveat", cursive; color: var(--graphite); width: 100%; display: flex; align-items: center; justify-content: center; }
+  .tag.big { width: min(440px, 100%); }
+  .tag.big .top { font-size: 64px; padding: 22px 16px 18px; }
+  .tag.big .name { font-size: clamp(44px, 9vw, 84px); min-height: 150px; padding: 8px 16px 18px; letter-spacing: 1px; }
+  
+  .hero { padding-top: 10px; }
+  .collage { position: relative; display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; }
+  .collage .tag.big { margin: 10px 0 10px; transform: rotate(-2.5deg); flex: 0 0 auto; }
+  .collage .intro { flex: 1 1 320px; margin-top: 0; }
+  .intro { margin-top: 26px; font-size: 26px; max-width: 64ch; }
+  .intro .big-line { font-size: 30px; }
+
+/* ---------- taped-in printouts ---------- */
+  .clip {
+    position: relative; background: #fffdf7; color: #2c2b27;
+    font-family: "Special Elite", "Courier New", monospace; font-size: 15.5px; line-height: 1.5;
+    padding: 22px 24px 20px; margin: 22px 0 34px;
+    box-shadow: 0 10px 22px var(--shadow), 0 1px 2px rgba(0,0,0,.1); border: 1px solid rgba(0,0,0,.06);
+  }
+  .clip.r1 { transform: rotate(-.8deg); } .clip.r2 { transform: rotate(.7deg); } .clip.r3 { transform: rotate(-.4deg); }
+  .clip h3 { font-family: inherit; font-size: 17px; font-weight: 400; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 4px; max-width: 70%; }
+  .clip .meta { color: #6d6a60; margin: 0 0 10px; }
+  .clip ul { margin: 0; padding-left: 20px; } .clip li { margin: 0 0 5px; }
+  .tape {
+    position: absolute; width: 120px; height: 30px; background: var(--tape); box-shadow: 0 1px 2px rgba(0,0,0,.12);
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.35) 0 6px, transparent 6px 12px);
+  }
+  .tape.tl { top: -14px; left: 26px; transform: rotate(-6deg); }
+  .tape.tr { top: -14px; right: 26px; transform: rotate(5deg); }
+  .tape.c { top: -14px; left: 50%; margin-left: -60px; transform: rotate(-2deg); }
+  .note-margin { font-size: 22px; color: var(--sticker-red); position: relative; padding-left: 40px; max-width: 46ch; margin: -14px 0 26px 6px; }
+  .note-margin svg { position: absolute; left: 0; top: -4px; }
+
+/* ---------- stack list ---------- */
+  .stack-list { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 40px; font-size: 24px; }
+  .stack-list li { break-inside: avoid; padding: 2px 0 2px 34px; position: relative; }
+  .stack-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--marker-green); font-family: "Permanent Marker", cursive; font-size: 24px; }
+  .stack-list li small { color: var(--graphite-soft); font-size: 18px; }
+
+/* ---------- charts, drawn in on scroll ---------- */
+  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px 40px; align-items: start; }
+  .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .chart .cap { margin-top: 6px; font-size: 21px; }
+  .draw path.stroke { stroke-dasharray: var(--len, 1000); stroke-dashoffset: var(--len, 1000); }
+  .draw.on path.stroke { animation: draw 1.4s ease-out forwards; animation-delay: var(--d, 0s); }
+  .draw .bar { transform-origin: 50% 178px; transform: scaleY(0); }
+  .draw.on .bar { animation: grow .9s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: var(--d, 0s); }
+  .draw .lbl { opacity: 0; } .draw.on .lbl { animation: fade .5s ease-out forwards; animation-delay: var(--d, 0s); }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes grow { to { transform: scaleY(1); } }
+  @keyframes fade { to { opacity: 1; } }
+
+
+/* ---------- sticky notes ---------- */
+  .postits { display: flex; flex-wrap: wrap; gap: 26px 30px; }
+  .postit { width: 250px; min-height: 210px; padding: 26px 20px 20px; background: var(--postit); box-shadow: 4px 10px 16px var(--shadow); position: relative; font-size: 21px; line-height: 1.3; transition: transform .25s; }
+  .postit::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 26px; background: rgba(0,0,0,.05); }
+  .postit:nth-child(1) { transform: rotate(-1.5deg); } .postit:nth-child(2) { transform: rotate(1deg); background: var(--postit-2); } .postit:nth-child(3) { transform: rotate(-.8deg); background: var(--postit-4); }
+  .postit:hover { transform: rotate(0) translateY(-4px); }
+  .postit b { font-family: "Permanent Marker", cursive; font-weight: 400; font-size: 22px; display: block; margin: 0 0 6px; color: var(--graphite); }
+  .postit .tech { font-size: 17px; color: var(--graphite-soft); display: block; margin-top: 10px; }
+
+  .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 48px; }
+  .notes b { color: var(--marker-blue); font-weight: 600; } .notes p { font-size: 21px; }
+
+  .card { position: relative; display: block; width: fit-content; max-width: 100%; background: #fffdf7; padding: 22px 28px 20px; font-family: "Special Elite", "Courier New", monospace; font-size: 16px; line-height: 1.7; color: #2c2b27; box-shadow: 0 10px 22px var(--shadow); transform: rotate(1.2deg); margin: 18px 0 8px; }
+  .card .who { font-size: 19px; } .card a { border-bottom-color: #2c2b27; color: #2c2b27; }
+  .stamp { position: absolute; right: -28px; top: -22px; transform: rotate(12deg); border: 3px solid var(--sticker-red); color: var(--sticker-red); border-radius: 8px; font-family: "Permanent Marker", cursive; font-size: 18px; padding: 4px 12px; opacity: .85; background: rgba(255,255,255,.6); }
+  .foot { margin-top: 30px; font-size: 19px; color: var(--graphite-soft); }
+
+/* ---------- drawing layer and pencil case ---------- */
+  #ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; touch-action: none; }
+  .sheet.drawing #ink { pointer-events: auto; cursor: crosshair; }
+  .pencilcase {
+    position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 50;
+    display: flex; gap: 6px; align-items: flex-end; padding: 10px 12px 8px; border-radius: 16px 16px 10px 10px;
+    background: linear-gradient(#5b4a3a, #3f3128); box-shadow: 0 14px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .pencilcase .label { position: absolute; top: -26px; left: 6px; font-size: 18px; color: #f7f2e3; text-shadow: 0 1px 0 rgba(0,0,0,.5); transform: rotate(-4deg); white-space: nowrap; }
+  .tool { width: 26px; height: 92px; border: 0; padding: 0; cursor: pointer; border-radius: 4px 4px 3px 3px; position: relative; transform: translateY(14px); transition: transform .2s; background: var(--c); box-shadow: inset -4px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.25); }
+  .tool::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 0; height: 0; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 14px solid var(--c); filter: brightness(.8); }
+  .tool.pencil { --c: #e0b04a; } .tool.pen { --c: #2857c9; } .tool.red { --c: #d3372b; } .tool.hl { --c: #ffe94d; border-radius: 6px 6px 3px 3px; width: 30px; } .tool.hl::after { border-top-color: #ffe94d; margin-left: -15px; border-left-width: 15px; border-right-width: 15px; }
+  .tool.eraser { --c: #f2c6c0; height: 44px; border-radius: 6px; } .tool.eraser::after { display: none; }
+  .tool:hover, .tool:focus-visible { transform: translateY(2px); outline: none; }
+  .tool[aria-pressed="true"] { transform: translateY(-10px); box-shadow: inset -4px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.25), 0 0 0 3px #f7f2e3; }
+  .tool.action { width: auto; height: 44px; padding: 0 10px; font: 600 17px "Caveat", cursive; color: #f7f2e3; background: transparent; box-shadow: none; border: 2px dashed rgba(247,242,227,.6); transform: none; }
+  .tool.action::after { display: none; }
+  .tool.action:hover { background: rgba(255,255,255,.08); transform: none; }
+  .hint { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: #fff; color: var(--graphite); padding: 8px 16px; border-radius: 8px; font-size: 20px; box-shadow: 0 8px 20px rgba(0,0,0,.3); z-index: 49; opacity: 0; transition: opacity .3s; pointer-events: none; max-width: calc(100vw - 32px); text-align: center; }
+  .hint.show { opacity: 1; }
+
+/* ---------- desk objects: draggable, throwable ---------- */
+  .item { position: absolute; z-index: 25; cursor: grab; touch-action: none; user-select: none; will-change: transform; filter: drop-shadow(0 6px 6px rgba(30,20,5,.35)); }
+  .item.dragging { cursor: grabbing; filter: drop-shadow(0 16px 14px rgba(30,20,5,.4)); z-index: 26; }
+  .sheet.drawing .item { pointer-events: none; }
+  .item svg { display: block; }
+  .item.pencil { right: 5%; top: 2570px; }
+  .item.clip { right: -18px; top: -26px; }
+  .item.ruler { left: 58%; top: 3230px; }
+  .item.eraser { right: 10%; bottom: 250px; }
+
+/* ---------- pocket terminal device ---------- */
+  .device {
+    position: relative; width: 100%; max-width: 860px; margin: 18px 0 6px; padding: 18px 18px 20px; border-radius: 14px;
+    background: linear-gradient(165deg, #54555a, #2e2f33 60%, #26272b); color: #d9dbd2;
+    box-shadow: 0 16px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 0 rgba(0,0,0,.4);
+    transform: rotate(-.8deg); font-family: "VT323", "SF Mono", Menlo, monospace;
+  }
+  .device .brand { display: flex; justify-content: space-between; font: 500 13px "Patrick Hand", sans-serif; letter-spacing: 1.5px; color: #b9bbb3; margin: 0 4px 10px; }
+  .device .lcd {
+    background: linear-gradient(#c3cfb3, #b4c2a5); color: #0f1a12; border-radius: 6px; padding: 14px 16px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.25);
+    font-size: 24px; line-height: 1.28; height: 320px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  .device .lcd .in { color: #1d4a3a; }
+  .device .lcd .err { color: #7a1f1f; }
+  .device .row { display: flex; gap: 8px; margin-top: 12px; align-items: stretch; }
+  .device input {
+    flex: 1; min-width: 0; font: inherit; font-size: 24px; color: #0f1a12; background: #c6d1b8; border: 0; border-radius: 6px; padding: 8px 12px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.35);
+  }
+  .device input:focus { outline: 2px solid #f4e27a; outline-offset: 1px; }
+  .device .keys { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 12px; }
+  .device .key {
+    font: 600 16px "Patrick Hand", sans-serif; letter-spacing: .5px; color: #ecece6; background: linear-gradient(#5d5f66, #3d3f45);
+    border: 0; border-radius: 8px; padding: 9px 4px; cursor: pointer; box-shadow: 0 3px 0 #1c1d20, inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .device .key:active { transform: translateY(2px); box-shadow: 0 1px 0 #1c1d20; }
+  .device .key.c { background: linear-gradient(#a7433a, #7d2d26); }
+  .device .key.run { background: linear-gradient(#3f6a55, #2b4b3c); }
+  .device .key:focus-visible { outline: 2px solid #f4e27a; outline-offset: 2px; }
+  .device-note { font-size: 20px; color: var(--graphite-soft); max-width: 46ch; }
+
+/* ---------- not in the CV ---------- */
+  .route { width: 100%; max-width: 760px; height: auto; display: block; margin: 4px 0 14px; overflow: visible; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 44px; }
+  .facts p { font-size: 21px; }
+  .facts b { color: var(--marker-blue); font-weight: 600; }
+  .lcd canvas.game { display: block; height: 100%; width: auto; max-width: 100%; margin: 0 auto; }
+  .lcd.playing { padding: 8px; overflow: hidden; display: flex; justify-content: center; }
+  .device .keys.game { grid-template-columns: 96px 96px 1fr 96px 96px; grid-template-rows: 54px 54px; gap: 10px; max-width: 640px; margin-inline: auto; }
+  .device .keys.game .key { font-size: 22px; padding: 0; height: 54px; }
+  .device .keys.game .quit { grid-column: 3; grid-row: 1 / span 2; align-self: center; justify-self: center; width: 110px; height: 44px; font-size: 15px; }
+
+/* ---------- scribbled-over secret next to the terminal ---------- */
+  .term-row { display: flex; flex-direction: column; align-items: stretch; }
+  .secret-note { margin: 4px 4px 0 auto; font-size: 19px; color: var(--graphite-soft); position: relative; transform: rotate(-1deg); display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .secret { position: relative; display: inline-block; padding: 0 8px; font-family: "Permanent Marker", cursive; font-size: 22px; color: var(--sticker-red); letter-spacing: 1px; line-height: 1; }
+  .secret canvas { position: absolute; inset: -9px -12px; width: calc(100% + 24px); height: calc(100% + 18px); cursor: not-allowed; }
+  .sheet.drawing .secret canvas { cursor: crosshair; }
+  .secret.revealed canvas { display: none; }
+  .secret-note small { font-size: 16px; color: var(--graphite-soft); }
+
+/* ---------- margin notes and doodles ---------- */
+  .doodle { position: absolute; pointer-events: none; color: var(--graphite-soft); font-size: 19px; line-height: 1.15; z-index: 6; }
+  .doodle svg { display: block; overflow: visible; }
+  .doodle.txt { max-width: 190px; }
+  .doodle.red { color: var(--sticker-red); }
+  .doodle.blue { color: var(--marker-blue); }
+  .stain { position: absolute; width: 96px; height: 96px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, transparent 58%, rgba(120,80,30,.16) 60%, rgba(120,80,30,.28) 66%, rgba(120,80,30,.12) 70%, transparent 74%); transform: rotate(-12deg); }
+  .stain::after { content: ""; position: absolute; inset: 6px 4px 2px 8px; border-radius: 50%; border: 2px solid rgba(120,80,30,.14); }
+
+/* ---------- hand-drawn look: pencil wobble filter ---------- */
+  .doodle svg, .note-margin svg { filter: url(#sketch); }
+  .doodle svg [data-ghost] { opacity: .45; }
+
+  @media (max-width: 720px) {
+    body { font-size: 20px; padding: 12px 8px 110px; }
+    .sheet { padding: 40px 18px 44px 46px; }
+    .sheet::before { left: 34px; } .sheet::after { left: 8px; }
+    .stack-list { columns: 1; } .notes, .facts { grid-template-columns: 1fr; }
+    .postit { width: 100%; min-height: 0; }
+    .tag.big .top { font-size: 46px; padding: 16px 12px 12px; }
+    .intro, .intro .big-line { font-size: 23px; }
+    .card { transform: none; } .stamp { right: 8px; top: -18px; }
+    .item.ruler, .item.clip, .doodle, .stain { display: none; } .item.pencil { top: 520px; right: 2%; } .item.eraser { right: 6%; bottom: 120px; }
+    .device { transform: none; padding: 12px; } .device .keys { grid-template-columns: repeat(4, 1fr); } .device .keys.game { grid-template-columns: 64px 64px 1fr 64px 64px; gap: 8px; } .device .lcd, .device input { font-size: 20px; } .device .lcd { height: 240px; }
+    .pencilcase { right: 8px; padding: 8px 8px 6px; gap: 4px; } .tool { width: 22px; height: 70px; } .tool.hl { width: 26px; }
+    .pencilcase .label { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draw path.stroke { stroke-dashoffset: 0 !important; animation: none !important; }
+    .draw .bar { transform: none !important; animation: none !important; } .draw .lbl { opacity: 1 !important; animation: none !important; }
+    .tag, .postit, .tool, .item { transition: none !important; }
+  }

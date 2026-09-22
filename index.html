@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Miroslav's Notebook</title>
+<meta name="description" content="Miroslav Bakaev, full-stack engineer: React, TypeScript, Node.js, Python. Based in Amsterdam.">
+<meta property="og:title" content="Miroslav's Notebook">
+<meta property="og:description" content="Full-stack engineer. 4+ years of shipping web and AI products end to end.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Permanent+Marker&family=Special+Elite&family=Patrick+Hand&family=VT323&display=swap">
+<link rel="stylesheet" href="css/notebook.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sketch" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="sketch-soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+<main class="sheet" id="sheet">
+
+  <!-- Desk objects: draggable, with a little physics (js/desk.js) -->
+  <div class="item pencil" data-rot="-28" aria-hidden="true">
+    <svg width="210" height="26" viewBox="0 0 210 26"><rect x="26" y="5" width="160" height="16" rx="2" fill="#d9a441"/><rect x="26" y="5" width="160" height="5" fill="rgba(255,255,255,.28)"/><rect x="26" y="16" width="160" height="5" fill="rgba(0,0,0,.14)"/><rect x="186" y="4" width="14" height="18" rx="2" fill="#c9c2b4"/><rect x="200" y="6" width="10" height="14" rx="4" fill="#d98b86"/><polygon points="26,5 4,13 26,21" fill="#e8cfa0"/><polygon points="9,11 4,13 9,15" fill="#35342f"/></svg>
+  </div>
+  <div class="item eraser" data-rot="12" aria-hidden="true">
+    <svg width="74" height="36" viewBox="0 0 74 36"><rect x="2" y="4" width="70" height="28" rx="4" fill="#e9b3ad"/><rect x="2" y="4" width="70" height="9" rx="4" fill="rgba(255,255,255,.35)"/><rect x="2" y="20" width="70" height="12" rx="4" fill="rgba(0,0,0,.08)"/><rect x="26" y="4" width="22" height="28" fill="#3b4a8a" opacity=".85"/></svg>
+  </div>
+  <div class="item ruler" data-rot="-6" aria-hidden="true">
+    <svg width="260" height="30" viewBox="0 0 260 30"><rect x="1" y="1" width="258" height="28" rx="2" fill="rgba(234,220,170,.85)" stroke="#a9976a"/><g stroke="#5b5340" stroke-width="1"><line x1="10" y1="1" x2="10" y2="12"/> <line x1="20" y1="1" x2="20" y2="7"/> <line x1="30" y1="1" x2="30" y2="7"/> <line x1="40" y1="1" x2="40" y2="7"/> <line x1="50" y1="1" x2="50" y2="7"/> <line x1="60" y1="1" x2="60" y2="12"/> <line x1="70" y1="1" x2="70" y2="7"/> <line x1="80" y1="1" x2="80" y2="7"/> <line x1="90" y1="1" x2="90" y2="7"/> <line x1="100" y1="1" x2="100" y2="7"/> <line x1="110" y1="1" x2="110" y2="12"/> <line x1="120" y1="1" x2="120" y2="7"/> <line x1="130" y1="1" x2="130" y2="7"/> <line x1="140" y1="1" x2="140" y2="7"/> <line x1="150" y1="1" x2="150" y2="7"/> <line x1="160" y1="1" x2="160" y2="12"/> <line x1="170" y1="1" x2="170" y2="7"/> <line x1="180" y1="1" x2="180" y2="7"/> <line x1="190" y1="1" x2="190" y2="7"/> <line x1="200" y1="1" x2="200" y2="7"/> <line x1="210" y1="1" x2="210" y2="12"/> <line x1="220" y1="1" x2="220" y2="7"/> <line x1="230" y1="1" x2="230" y2="7"/> <line x1="240" y1="1" x2="240" y2="7"/> <line x1="250" y1="1" x2="250" y2="7"/></g></svg>
+  </div>
+
+  <canvas id="ink" aria-label="Drawing layer. Pick a tool from the pencil case to draw on the page." role="img"></canvas>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="stain" style="right: -6px; top: -30px;" aria-hidden="true"></div>
+    <div class="collage">
+      <div class="tag big" aria-label="Hello, my name is Miroslav">
+        <div class="top"><b>HELLO</b><small>my name is</small></div>
+        <div class="name">Miroslav</div>
+      </div>
+      <div class="intro">
+        <p class="big-line">Full-stack engineer. <mark>4+ years</mark> of shipping web and AI products end to end: UI, backend, infrastructure, deployment.</p>
+        <p>Last 18 months: co-founder and lead engineer at a B2B SaaS startup. Built it from an empty repo, ran a small team, kept writing code every day.</p>
+        <p class="pencil">Based in Amsterdam. Open to senior full-stack or frontend roles in Europe. <span class="wobble">Visa sponsorship needed.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pocket Terminal -->
+  <section>
+    <div class="item clip" data-rot="18" aria-hidden="true">
+    <svg width="34" height="90" viewBox="0 0 34 90" fill="none" stroke="#8d949c" stroke-width="3.2" stroke-linecap="round"><path d="M9 78 V 16 a 8 8 0 0 1 16 0 V 66 a 5 5 0 0 1 -10 0 V 24"/><path d="M25 66 V 78 a 8 8 0 0 1 -16 0"/></svg>
+  </div>
+    <h2>Terminal<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 8 C 60 3, 120 11, 190 6 S 260 8, 298 7"/></svg></h2>
+    <div class="doodle txt hide-sm" style="right: 40px; top: -10px; transform: rotate(-4deg);" aria-hidden="true">
+      <svg width="150" height="60" viewBox="0 0 150 60"><rect x="8" y="10" width="34" height="34" rx="3" fill="none" stroke="#6d6a61" stroke-width="2"/><rect x="14" y="10" width="20" height="10" fill="#6d6a61"/><rect x="15" y="30" width="20" height="12" fill="none" stroke="#6d6a61" stroke-width="2"/><path d="M2 6 L 48 48" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 6 L 2 48" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="52" y="34" font-family="Caveat" font-size="19" fill="#6d6a61">nothing is saved</text></svg>
+    </div>
+    <p class="device-note">A command line for this notebook. Start with <b>stack</b> or <b>help</b>; it knows things the page doesn't say.</p>
+    <div class="term-row">
+    <div class="device" role="region" aria-label="Pocket terminal">
+      <div class="brand"><span>MB-4 · POCKET TERMINAL</span><span>v2026.09</span></div>
+      <div class="lcd" id="lcd" aria-live="polite"></div>
+      <form class="row" id="termform" autocomplete="off">
+        <input id="cmd" type="text" placeholder="help" aria-label="Command" spellcheck="false">
+        <button class="key run" type="submit">ENTER</button>
+      </form>
+      <div class="keys">
+        <button class="key" type="button" data-cmd="stack">STACK</button>
+        <button class="key" type="button" data-cmd="experience">EXP</button>
+        <button class="key" type="button" data-cmd="projects">PROJ</button>
+        <button class="key" type="button" data-cmd="contact">CONTACT</button>
+        <button class="key" type="button" data-cmd="numbers">NUMBERS</button>
+        <button class="key" type="button" data-cmd="now">NOW</button>
+        <button class="key" type="button" data-cmd="help">HELP</button>
+        <button class="key c" type="button" data-cmd="clear">C</button>
+      </div>
+    </div>
+    <div class="secret-note">one command help won't list: <span class="secret" id="secret" aria-label="A word covered in marker. Use the eraser from the pencil case to reveal it."><span>egg</span><canvas id="scribble" aria-hidden="true"></canvas></span> <small>(eraser's in the pencil case)</small></div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section>
+    <h2>Where I've been<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 9 C 70 3, 130 11, 200 5 S 270 6, 298 8"/></svg></h2>
+
+    <article class="clip r1">
+      <span class="tape tl"></span><span class="tape tr"></span>
+    <div class="doodle red hide-sm" style="right: -34px; top: 212px;" aria-hidden="true">
+      <svg width="60" height="70" viewBox="0 0 60 70"><path d="M30 4 L 36 20 L 54 21 L 40 32 L 45 50 L 30 40 L 15 50 L 20 32 L 6 21 L 24 20 Z" fill="none" stroke="#b8392e" stroke-width="2.2" stroke-linejoin="round"/><text x="4" y="68" font-family="Caveat" font-size="18" fill="#b8392e">this one</text></svg>
+    </div>
+      <h3>Renairo — Co-founder &amp; Lead Full-Stack Engineer</h3>
+      <p class="meta">B2B SaaS startup · Jan 2025 – present</p>
+      <ul>
+        <li>Rebuilt the product from scratch: customer portal and internal B2B dashboard on Next.js, Node APIs, PostgreSQL. Deployed on AWS and Yandex Cloud.</li>
+        <li>Shipped LLM features on a production RAG pipeline; tuned prompts and retrieval against real-traffic failures.</li>
+        <li>Designed a multi-model pipeline (separate models for transcription and evaluation) routed on quality and cost.</li>
+        <li>Reworked infrastructure and deployment: cloud spend down ~50%, no reliability regression.</li>
+        <li>Brought Claude Code and Cursor into the workflow: feature delivery from ~2 weeks to 3–4 days.</li>
+        <li>Led a small team: priorities, code review, CI/CD, release workflow.</li>
+      </ul>
+    </article>
+    <p class="note-margin">
+      <svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true"><path d="M30 4 C 18 8, 10 18, 6 34" fill="none" stroke="#d3372b" stroke-width="2.2" stroke-linecap="round"/><path d="M4 24 L 6 36 L 17 31" fill="none" stroke="#d3372b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      the infra rebuild was the best decision I made there. Nobody asked for it as a feature.
+    </p>
+
+    <article class="clip r2">
+      <span class="tape c"></span>
+    <div class="doodle txt hide-sm" style="right: 18px; top: 4px; width: 150px; transform: rotate(3deg);" aria-hidden="true">
+      <svg width="150" height="80" viewBox="0 0 150 80"><path d="M 40 70 C 30 50, 44 36, 66 30" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 56 24 L 68 29 L 62 40" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="70" y="22" font-family="Caveat" font-size="19" fill="#6d6a61">RAG in prod</text><text x="70" y="42" font-family="Caveat" font-size="19" fill="#6d6a61">started here</text></svg>
+    </div>
+      <h3>Siberian Neural Networks — Full-Stack Developer</h3>
+      <p class="meta">AI product company · Feb 2024 – Jan 2025</p>
+      <ul>
+        <li>Admin panel and operational tooling for neural-network products (Vue 3, Pinia, TypeScript).</li>
+        <li>RAG functionality with the ML team: retrieval, data preparation, LLM integration, backend services.</li>
+        <li>REST APIs with Express (JWT, role-based access), PostgreSQL via TypeORM, Docker/Nginx, GitLab CI/CD.</li>
+        <li>Landing pages and lead funnels (Astro, Vue); an Electron desktop build; legacy code and reviews.</li>
+      </ul>
+    </article>
+
+    <article class="clip r3">
+      <span class="tape tl"></span><span class="tape tr"></span>
+    <div class="doodle txt hide-sm" style="right: 24px; top: 6px; width: 120px; transform: rotate(4deg);" aria-hidden="true">
+      <svg width="120" height="70" viewBox="0 0 120 70"><path d="M 14 60 C 10 44, 18 34, 30 26" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 20 28 L 31 24 L 32 36" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="36" y="20" font-family="Caveat" font-size="19" fill="#6d6a61">first real job</text></svg>
+    </div>
+      <h3>Media Research Family — Web Developer, Automation</h3>
+      <p class="meta">market-research agency · Mar 2022 – Dec 2023</p>
+      <ul>
+        <li>Production browser-automation agents with Puppeteer: emulation, anti-detection, resilient scraping and form pipelines.</li>
+        <li>Internal RAG system with an ML engineer: retrieval, knowledge-base integration.</li>
+        <li>Internal admin panel (Next.js), REST APIs (Express, JWT, RBAC), PostgreSQL with Drizzle ORM, Docker and Traefik, headless CMS.</li>
+      </ul>
+    </article>
+    <p class="note-margin">
+      <svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true"><path d="M30 4 C 18 8, 10 18, 6 34" fill="none" stroke="#d3372b" stroke-width="2.2" stroke-linecap="round"/><path d="M4 24 L 6 36 L 17 31" fill="none" stroke="#d3372b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      hardest problem so far: a scraper that had to run a <em>headed</em> browser on a GPU-less VM, plus an LLM that had to return the same structure every single time. It did, eventually.
+    </p>
+  </section>
+
+  <!-- Charts -->
+  <section>
+    <div class="doodle hide-sm" style="right: 46%; top: 40px;" aria-hidden="true">
+      <svg width="90" height="80" viewBox="0 0 90 80"><path d="M22 44 C 8 44, 8 26, 24 26 C 26 12, 48 10, 54 22 C 68 18, 80 30, 72 44 Z" fill="none" stroke="#6d6a61" stroke-width="2" stroke-linejoin="round"/><circle cx="46" cy="62" r="9" fill="none" stroke="#6d6a61" stroke-width="2"/><text x="41" y="67" font-family="Caveat" font-size="15" fill="#6d6a61">€</text><path d="M 46 48 L 46 52" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="doodle hide-sm" style="right: -16px; top: 30px;" aria-hidden="true">
+      <svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="36" r="24" fill="none" stroke="#6d6a61" stroke-width="2"/><path d="M 35 20 L 35 36 L 47 44" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 29 8 L 41 8" stroke="#6d6a61" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <h2>Two numbers from the last rebuild<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 7 C 80 12, 140 2, 220 8 S 280 10, 298 6"/></svg></h2>
+    <div class="charts">
+      <figure class="chart" style="margin:0">
+        <svg class="draw" viewBox="0 0 320 210" role="img" aria-label="Cloud spend: before the infrastructure rework 100%, after about 50%">
+          <path class="stroke" d="M40 18 C 41 60, 39 120, 40 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round"/>
+          <path class="stroke" d="M40 178 C 100 179, 200 177, 300 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round" style="--d:.2s"/>
+          <path class="bar" d="M80 178 L 82 42 C 110 40, 140 44, 150 42 L 152 178 Z" fill="#d3372b" opacity=".85" style="--d:.5s"/>
+          <path class="bar" d="M195 178 L 197 110 C 225 108, 250 112, 262 110 L 265 178 Z" fill="#2f9a57" opacity=".85" style="--d:.9s"/>
+          <text class="lbl" x="116" y="34" text-anchor="middle" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:1.1s">100%</text>
+          <text class="lbl" x="231" y="102" text-anchor="middle" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:1.5s">~50%</text>
+          <text x="116" y="200" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6b675d">before</text>
+          <text x="231" y="200" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6b675d">after rework</text>
+          <text x="46" y="14" font-family="Caveat" font-size="17" fill="#6b675d">cloud spend / month</text>
+        </svg>
+        <figcaption class="cap">Same product, same traffic. Half the bill, after rebuilding deployment and environments.</figcaption>
+      </figure>
+      <figure class="chart" style="margin:0">
+        <svg class="draw" viewBox="0 0 320 210" role="img" aria-label="Feature delivery cycle: about two weeks before, three to four days after">
+          <path class="stroke" d="M40 18 C 41 60, 39 120, 40 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round"/>
+          <path class="stroke" d="M40 178 C 100 179, 200 177, 300 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round" style="--d:.2s"/>
+          <path class="stroke" d="M60 40 C 90 44, 120 46, 150 52 C 180 60, 205 120, 230 146 C 250 166, 270 164, 292 160" fill="none" stroke="#2857c9" stroke-width="4" stroke-linecap="round" style="--d:.6s"/>
+          <circle class="lbl" cx="60" cy="40" r="6" fill="#2857c9" style="--d:.6s"/>
+          <circle class="lbl" cx="292" cy="160" r="6" fill="#2857c9" style="--d:1.9s"/>
+          <text class="lbl" x="66" y="30" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:.8s">~14 days</text>
+          <text class="lbl" x="236" y="150" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:2s">3–4 days</text>
+          <text x="46" y="14" font-family="Caveat" font-size="17" fill="#6b675d">days per feature</text>
+          <text x="170" y="200" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6b675d">Claude Code + Cursor in the workflow, with review</text>
+        </svg>
+        <figcaption class="cap">AI in the loop, reviewed line by line. Used blindly it ships vulnerabilities; used with review it halved the cycle.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Side Projects -->
+  <section>
+    <div class="doodle red hide-sm" style="left: 250px; top: 46px;" aria-hidden="true">
+      <svg width="44" height="60" viewBox="0 0 44 60"><path d="M22 4 C 30 18, 40 22, 38 38 C 37 50, 28 56, 22 56 C 14 56, 6 50, 6 38 C 6 30, 12 26, 14 20 C 16 28, 20 30, 22 26 C 24 20, 18 12, 22 4 Z" fill="none" stroke="#b8392e" stroke-width="2.2" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="doodle hide-sm" style="left: 530px; top: 44px;" aria-hidden="true">
+      <svg width="54" height="54" viewBox="0 0 54 54"><path d="M8 28 L 27 10 L 46 28 M 13 24 L 13 46 L 41 46 L 41 24 M 22 46 L 22 32 L 32 32 L 32 46" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    </div>
+    <div class="doodle hide-sm" style="right: -22px; top: 60px;" aria-hidden="true">
+      <svg width="60" height="70" viewBox="0 0 60 70"><rect x="10" y="46" width="40" height="10" rx="2" fill="none" stroke="#6d6a61" stroke-width="2"/><rect x="14" y="34" width="36" height="10" rx="2" fill="none" stroke="#6d6a61" stroke-width="2" transform="rotate(-4 32 39)"/><rect x="10" y="22" width="38" height="10" rx="2" fill="none" stroke="#6d6a61" stroke-width="2" transform="rotate(3 29 27)"/></svg>
+    </div>
+    <h2>Side projects<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 9 C 60 4, 120 10, 190 5 S 260 9, 298 7"/></svg></h2>
+    <div class="postits">
+      <div class="postit">
+        <b>Flame</b>
+        A private relationship-management app, built and shipped solo: cards, tags, statuses, timelines, ratings, reminders, activity insights. Voice input through an LLM with anonymised processing, encrypted notes, time-limited sharing links.
+        <span class="tech">personal project · AI voice input · encryption</span>
+      </div>
+      <div class="postit">
+        <b>Rental management tool</b>
+        Payment notifications, utility-meter tracking, profit calculation and reports for landlords. In active use by real people.
+        <span class="tech">React · FastAPI · PostgreSQL</span>
+      </div>
+      <div class="postit">
+        <b>Internal knowledge wiki</b>
+        Combines internal e-commerce data with external news to surface market and product insights.
+        <span class="tech">RAG pipeline · AI-based filtering</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Not In The Cv -->
+  <section>
+    <div class="doodle hide-sm" style="right: -24px; top: 560px;" aria-hidden="true">
+      <svg width="80" height="50" viewBox="0 0 80 50"><rect x="6" y="12" width="10" height="26" rx="2" fill="#6d6a61"/><rect x="64" y="12" width="10" height="26" rx="2" fill="#6d6a61"/><rect x="16" y="17" width="8" height="16" rx="1" fill="#6d6a61"/><rect x="56" y="17" width="8" height="16" rx="1" fill="#6d6a61"/><rect x="24" y="22" width="32" height="6" fill="#6d6a61"/></svg>
+    </div>
+    <div class="doodle hide-sm" style="right: -20px; top: 400px;" aria-hidden="true">
+      <svg width="64" height="60" viewBox="0 0 64 60"><path d="M10 20 L 14 46 C 14 50, 18 52, 22 52 L 38 52 C 42 52, 46 50, 46 46 L 50 20 Z" fill="none" stroke="#6d6a61" stroke-width="2" stroke-linejoin="round"/><path d="M50 26 C 60 26, 60 40, 48 40" fill="none" stroke="#6d6a61" stroke-width="2"/><path d="M22 14 C 22 8, 28 8, 28 4 M 34 14 C 34 8, 40 8, 40 4" fill="none" stroke="#6d6a61" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="doodle txt hide-sm" style="right: -20px; top: 150px; width: 100px; transform: rotate(-6deg);" aria-hidden="true">
+      <svg width="100" height="40" viewBox="0 0 100 40"><text x="4" y="26" font-family="Caveat" font-size="19" fill="#6d6a61">all true, btw</text><path d="M 4 34 C 30 30, 60 36, 96 31" fill="none" stroke="#6d6a61" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <h2>Not in the CV<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 7 C 70 12, 130 3, 200 9 S 270 5, 298 8"/></svg></h2>
+    <svg class="route draw" viewBox="0 0 760 124" role="img" aria-label="Route: Novosibirsk, then Bangkok, then Amsterdam, then somewhere next">
+      <path class="stroke" d="M60 62 C 140 20, 210 96, 300 70 S 430 30, 580 58" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-dasharray="7 6" stroke-linecap="round"/>
+      <path class="stroke" d="M592 56 C 630 40, 660 66, 700 46" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-dasharray="7 6" stroke-linecap="round" style="--d:1.2s"/>
+      <path class="stroke" d="M690 38 L 702 45 L 692 54" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="--d:1.6s"/>
+      <circle cx="60" cy="62" r="7" fill="#b8392e"/><circle cx="300" cy="70" r="7" fill="#b8392e"/><circle cx="580" cy="58" r="8" fill="#24437a"/>
+      <text class="lbl" x="726" y="56" text-anchor="middle" font-family="Permanent Marker" font-size="34" fill="#b8392e" style="--d:1.8s">?</text>
+      <text x="60" y="96" text-anchor="middle" font-family="Caveat" font-size="20" fill="#35342f">Novosibirsk</text>
+      <text x="60" y="114" text-anchor="middle" font-family="Caveat" font-size="16" fill="#6d6a61">restaurant, then code</text>
+      <text x="300" y="104" text-anchor="middle" font-family="Caveat" font-size="20" fill="#35342f">Bangkok</text>
+      <text x="300" y="120" text-anchor="middle" font-family="Caveat" font-size="16" fill="#6d6a61">ran a startup from here</text>
+      <text x="580" y="92" text-anchor="middle" font-family="Caveat" font-size="20" fill="#35342f">Amsterdam</text>
+      <text x="580" y="110" text-anchor="middle" font-family="Caveat" font-size="16" fill="#6d6a61">now</text>
+      <text class="lbl" x="726" y="92" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6d6a61" style="--d:2s">your team?</text>
+    </svg>
+    <div class="facts">
+      <div>
+        <p><b>It started in a restaurant.</b> I was packing delivery orders and decided something had to change. A family friend built websites, so I asked if I could try; he took my learning on himself, and his was the first code I copied. Economics at Novosibirsk State stayed unfinished. Code became the thing I'd do without being asked.</p>
+        <p><b>Bangkok was too quiet.</b> I have my own flat there and it's calm, calmer than I need. Amsterdam suits me better: an English-speaking way of thinking has always felt closer to mine, something I first noticed as a schoolboy, during a year at a school in Oxford.</p>
+        <p><b>How the startup happened.</b> At a conference I was doing what I always do, sitting in a corner with a laptop, working. Someone came over and asked what I was building. That conversation became Renairo: a product for analysing and building sales teams. The hardest part of year one was not the code, it was figuring out what to build at all. I burned through a lot of theories before one worked.</p>
+        <p><b>Flame stays private.</b> I built it for myself and I use it. I'm not releasing it to other people: it holds personal data, and doing that properly means studying the privacy law in depth, which I don't have the time to do honestly. So it stays mine.</p>
+      </div>
+      <div>
+        <p><b>The mistake I keep making.</b> Forgetting to watch leftover build artifacts on VM disks. The disk fills up, I lose access, and everything gets reset. It has happened more than once. It's on the list.</p>
+        <p><b>My desk.</b> Two laptops: a Mac running macOS and Linux, and a Windows one. A monitor, coffee, a book, and a paper notebook. This page is modelled on that notebook.</p>
+        <p><b>What I can't stand is routine.</b> I want to build something new, always. The flip side: outside work I mostly work. When I don't, it's active rest. And the bench press is real: 125 kg.</p>
+        <p><b>English.</b> Learned everywhere, all the time. Working in it daily is the point.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notes To Self -->
+  <section>
+    <div class="doodle blue hide-sm" style="right: 30px; top: 330px; width: 120px;" aria-hidden="true">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <text x="2" y="16" font-family="Caveat" font-size="18" fill="#24437a">day one:</text>
+        <rect x="4" y="24" width="14" height="14" fill="none" stroke="#24437a" stroke-width="2"/><path d="M 6 31 L 11 36 L 20 24" fill="none" stroke="#24437a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="24" y="36" font-family="Caveat" font-size="18" fill="#24437a">limits</text>
+        <rect x="4" y="46" width="14" height="14" fill="none" stroke="#24437a" stroke-width="2"/><path d="M 6 53 L 11 58 L 20 46" fill="none" stroke="#24437a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="24" y="58" font-family="Caveat" font-size="18" fill="#24437a">metrics</text>
+        <rect x="4" y="68" width="14" height="14" fill="none" stroke="#24437a" stroke-width="2"/><path d="M 6 75 L 11 80 L 20 68" fill="none" stroke="#24437a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="24" y="80" font-family="Caveat" font-size="18" fill="#24437a">alerts</text>
+        <rect x="4" y="90" width="14" height="14" fill="none" stroke="#24437a" stroke-width="2"/><text x="24" y="102" font-family="Caveat" font-size="18" fill="#24437a">disk space</text>
+      </svg>
+    </div>
+    <h2>How I work<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 6 C 70 12, 140 3, 210 9 S 270 5, 298 8"/></svg></h2>
+    <div class="notes">
+      <div>
+        <p><b>On security.</b> I keep my own cybersecurity wiki and use it when I build auth, access control and deployments. I constantly form theories about how the app could be broken, then test them. "What can go wrong when this runs" is part of the design.</p>
+        <p><b>On AI tools.</b> Use them all day, review everything. They like to leak server env vars to the client with a public prefix, or open all ports both ways "for debugging".</p>
+      </div>
+      <div>
+        <p><b>On the memory leak.</b> One container leaked slowly for days until it got restarted under load. Now memory limits, metrics and alerts go in on day one. Observability is part of the feature.</p>
+        <p><b>On disagreements.</b> A lead once asked me to fix "my" bad code. Git blame said it was his. I fixed it and pushed. The product didn't care whose it was.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section>
+    <div class="doodle hide-sm" style="left: 420px; top: 60px;" aria-hidden="true">
+      <svg width="200" height="90" viewBox="0 0 200 90"><path d="M8 70 C 40 60, 70 40, 120 30" fill="none" stroke="#6d6a61" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/><path d="M122 30 L 178 8 L 150 44 L 140 34 Z M 140 34 L 138 46 L 150 44" fill="none" stroke="#6d6a61" stroke-width="2" stroke-linejoin="round"/><text x="60" y="84" font-family="Caveat" font-size="19" fill="#6d6a61">mail works best</text></svg>
+    </div>
+    <h2>Say hi<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 8 C 50 3, 100 12, 150 6 S 250 5, 298 9"/></svg></h2>
+    <div class="card">
+      <span class="stamp">open to work</span>
+      <div class="who">Miroslav Bakaev · Amsterdam, NL</div>
+      <div><a href="mailto:mirokbaka@gmail.com">mirokbaka@gmail.com</a></div>
+      <div><a href="https://github.com/Miroslav988" target="_blank" rel="noopener">github.com/Miroslav988</a></div>
+      <div><a href="https://linkedin.com/in/miroslav-bakaev-2569103ab" target="_blank" rel="noopener">linkedin.com/in/miroslav-bakaev-2569103ab</a></div>
+    </div>
+    <p class="foot">Available from October 2026. Relocation within Europe or a remote contract both work. Full CV on request or via LinkedIn.</p>
+    <p class="foot">The pencil case in the corner is real: pick a tool and mark up the page. Nothing you draw is saved anywhere.</p>
+  </section>
+</main>
+
+
+<div class="pencilcase" role="toolbar" aria-label="Pencil case: draw on the page">
+  <span class="label">pencil case ↓</span>
+  <button class="tool pencil" type="button" data-tool="pencil" aria-pressed="false" title="Pencil (1)" aria-label="Pencil"></button>
+  <button class="tool pen" type="button" data-tool="pen" aria-pressed="false" title="Blue marker (2)" aria-label="Blue marker"></button>
+  <button class="tool red" type="button" data-tool="red" aria-pressed="false" title="Red marker (3)" aria-label="Red marker"></button>
+  <button class="tool hl" type="button" data-tool="hl" aria-pressed="false" title="Highlighter (4)" aria-label="Highlighter"></button>
+  <button class="tool eraser" type="button" data-tool="eraser" aria-pressed="false" title="Eraser (5)" aria-label="Eraser"></button>
+  <button class="tool action" type="button" id="undo" title="Undo (Z)">undo</button>
+  <button class="tool action" type="button" id="clear" title="Clear all drawings">clear</button>
+</div>
+<div class="hint" id="hint"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
