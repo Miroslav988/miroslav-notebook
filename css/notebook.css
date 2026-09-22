@@ -150,6 +150,8 @@
 
 /* ---------- drawing layer and pencil case ---------- */
   #ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; touch-action: none; }
+  #fluid { position: absolute; inset: 0; pointer-events: none; z-index: 19; overflow: hidden; }
+  #fluid .fluid-tile { position: absolute; mix-blend-mode: multiply; image-rendering: auto; }
   .sheet.drawing #ink { pointer-events: auto; cursor: crosshair; }
   .pencilcase {
     position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 50;
@@ -161,6 +163,8 @@
   .tool::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 0; height: 0; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 14px solid var(--c); filter: brightness(.8); }
   .tool.pencil { --c: #e0b04a; } .tool.pen { --c: #2857c9; } .tool.red { --c: #d3372b; } .tool.hl { --c: #ffe94d; border-radius: 6px 6px 3px 3px; width: 30px; } .tool.hl::after { border-top-color: #ffe94d; margin-left: -15px; border-left-width: 15px; border-right-width: 15px; }
   .tool.eraser { --c: #f2c6c0; height: 44px; border-radius: 6px; } .tool.eraser::after { display: none; }
+  .tool.inkwell { --c: #23305e; width: 30px; height: 40px; border-radius: 5px 5px 8px 8px; box-shadow: inset 0 -12px 0 rgba(0,0,0,.35), inset 0 2px 0 rgba(255,255,255,.2); }
+  .tool.inkwell::after { bottom: auto; top: -8px; width: 14px; height: 9px; border: 0; margin-left: -7px; background: #4a4a4a; border-radius: 2px 2px 0 0; filter: none; }
   .tool:hover, .tool:focus-visible { transform: translateY(2px); outline: none; }
   .tool[aria-pressed="true"] { transform: translateY(-10px); box-shadow: inset -4px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.25), 0 0 0 3px #f7f2e3; }
   .tool.action { width: auto; height: 44px; padding: 0 10px; font: 600 17px "Caveat", cursive; color: #f7f2e3; background: transparent; box-shadow: none; border: 2px dashed rgba(247,242,227,.6); transform: none; }

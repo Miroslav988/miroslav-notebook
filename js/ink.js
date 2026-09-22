@@ -20,13 +20,14 @@ const HINTS = {
   red: 'Red marker. Esc to put it back.',
   hl: 'Highlighter. Try it on a sentence.',
   eraser: 'Eraser. Z undoes the last stroke.',
+  inkwell: 'Ink. Tap for a drop, drag to stir it. It dries on its own.',
 };
 
-const SHORTCUTS = { 1: 'pencil', 2: 'pen', 3: 'red', 4: 'hl', 5: 'eraser' };
+const SHORTCUTS = { 1: 'pencil', 2: 'pen', 3: 'red', 4: 'hl', 5: 'eraser', 6: 'inkwell' };
 const MAX_STROKES = 400;
 const BASE_WIDTH = 960;
 
-export function createInk(sheet) {
+export function createInk(sheet, fluid) {
   const canvas = document.getElementById('ink');
   const ctx = canvas.getContext('2d');
   const buttons = [...document.querySelectorAll('.tool[data-tool]')];
@@ -103,9 +104,17 @@ export function createInk(sheet) {
     return ev.getCoalescedEvents ? ev.getCoalescedEvents() : [ev];
   }
 
+  let last = null;
+
   function onDown(ev) {
     if (!tool) return;
     canvas.setPointerCapture(ev.pointerId);
+    if (tool === 'inkwell') {
+      fluid.drop(ev.clientX, ev.clientY);
+      last = [ev.clientX, ev.clientY];
+      ev.preventDefault();
+      return;
+    }
     const pressure = ev.pressure && ev.pressure !== 0.5 ? 0.6 + ev.pressure : 1;
     current = { tool, pressure, points: [pointAt(ev)] };
     if (tool === 'eraser') eraseListeners.forEach((fn) => fn(ev.clientX, ev.clientY));
@@ -113,6 +122,13 @@ export function createInk(sheet) {
   }
 
   function onMove(ev) {
+    if (tool === 'inkwell' && last) {
+      for (const e of coalesced(ev)) {
+        fluid.smear(e.clientX, e.clientY, (e.clientX - last[0]) * 0.03, (e.clientY - last[1]) * 0.03);
+        last = [e.clientX, e.clientY];
+      }
+      return;
+    }
     if (!current) return;
     for (const e of coalesced(ev)) {
       current.points.push(pointAt(e));
@@ -122,6 +138,7 @@ export function createInk(sheet) {
   }
 
   function onUp() {
+    last = null;
     if (!current) return;
     if (current.points.length > 1) strokes.push(current);
     strokes = strokes.slice(-MAX_STROKES);
@@ -135,6 +152,7 @@ export function createInk(sheet) {
   }
 
   function clear() {
+    fluid.clear();
     if (!strokes.length) return;
     strokes = [];
     redraw();

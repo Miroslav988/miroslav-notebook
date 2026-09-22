@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Permanent+Marker&family=Special+Elite&family=Patrick+Hand&family=VT323&display=swap">
-<link rel="stylesheet" href="css/notebook.css?v=202609221131">
+<link rel="stylesheet" href="css/notebook.css?v=202609221136">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -38,6 +38,7 @@
     <svg width="260" height="30" viewBox="0 0 260 30"><rect x="1" y="1" width="258" height="28" rx="2" fill="rgba(234,220,170,.85)" stroke="#a9976a"/><g stroke="#5b5340" stroke-width="1"><line x1="10" y1="1" x2="10" y2="12"/> <line x1="20" y1="1" x2="20" y2="7"/> <line x1="30" y1="1" x2="30" y2="7"/> <line x1="40" y1="1" x2="40" y2="7"/> <line x1="50" y1="1" x2="50" y2="7"/> <line x1="60" y1="1" x2="60" y2="12"/> <line x1="70" y1="1" x2="70" y2="7"/> <line x1="80" y1="1" x2="80" y2="7"/> <line x1="90" y1="1" x2="90" y2="7"/> <line x1="100" y1="1" x2="100" y2="7"/> <line x1="110" y1="1" x2="110" y2="12"/> <line x1="120" y1="1" x2="120" y2="7"/> <line x1="130" y1="1" x2="130" y2="7"/> <line x1="140" y1="1" x2="140" y2="7"/> <line x1="150" y1="1" x2="150" y2="7"/> <line x1="160" y1="1" x2="160" y2="12"/> <line x1="170" y1="1" x2="170" y2="7"/> <line x1="180" y1="1" x2="180" y2="7"/> <line x1="190" y1="1" x2="190" y2="7"/> <line x1="200" y1="1" x2="200" y2="7"/> <line x1="210" y1="1" x2="210" y2="12"/> <line x1="220" y1="1" x2="220" y2="7"/> <line x1="230" y1="1" x2="230" y2="7"/> <line x1="240" y1="1" x2="240" y2="7"/> <line x1="250" y1="1" x2="250" y2="7"/></g></svg>
   </div>
 
+  <div id="fluid" aria-hidden="true"></div>
   <canvas id="ink" aria-label="Drawing layer. Pick a tool from the pencil case to draw on the page." role="img"></canvas>
 
   <!-- Hero -->
@@ -313,11 +314,12 @@
   <button class="tool red" type="button" data-tool="red" aria-pressed="false" title="Red marker (3)" aria-label="Red marker"></button>
   <button class="tool hl" type="button" data-tool="hl" aria-pressed="false" title="Highlighter (4)" aria-label="Highlighter"></button>
   <button class="tool eraser" type="button" data-tool="eraser" aria-pressed="false" title="Eraser (5)" aria-label="Eraser"></button>
+  <button class="tool inkwell" type="button" data-tool="inkwell" aria-pressed="false" title="Ink (6): tap for a drop, drag to smear" aria-label="Ink"></button>
   <button class="tool action" type="button" id="undo" title="Undo (Z)">undo</button>
   <button class="tool action" type="button" id="clear" title="Clear all drawings">clear</button>
 </div>
 <div class="hint" id="hint"></div>
 
-<script type="module" src="js/main.js?v=202609221131"></script>
+<script type="module" src="js/main.js?v=202609221136"></script>
 </body>
 </html>
