@@ -304,3 +304,14 @@ h2 .handwriting path { fill: var(--marker-blue); }
 
 /* REPL mode: the LCD fits the drawing plus two lines on every screen size */
 .device .lcd.repl { height: auto; }
+
+/* ---------- more than one way to mark a phrase ---------- */
+mark.g { background: linear-gradient(104deg, transparent 2%, #cfe7c1 4%, #cfe7c1 96%, transparent 98%); }
+mark.p { background: linear-gradient(104deg, transparent 2%, #f6cfd6 4%, #f6cfd6 96%, transparent 98%); }
+mark.b { background: linear-gradient(104deg, transparent 2%, #cfe0f4 4%, #cfe0f4 96%, transparent 98%); }
+.u-red { background: none; text-decoration: underline wavy var(--sticker-red); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.u-blue { background: none; text-decoration: underline var(--marker-blue); text-decoration-thickness: 2.5px; text-underline-offset: 4px; text-decoration-skip-ink: none; }
+.u-double { background: none; text-decoration: underline double var(--graphite); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.circled { background: none; position: relative; padding: 0 6px; white-space: nowrap; }
+.circled::after { content: ""; position: absolute; inset: -6px -8px -8px -8px; pointer-events: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M14 30 C 10 8, 60 4, 100 6 S 194 10, 190 30 S 150 56, 100 54 S 8 52, 14 30 S 40 12, 70 9' fill='none' stroke='%23b8392e' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>") 0 0 / 100% 100% no-repeat; }
