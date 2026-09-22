@@ -1,3 +1,4 @@
+import { openNotebook } from './cover.js';
 import { initSketch } from './sketch.js';
 import { createInk } from './ink.js';
 import { createFluid } from './fluid.js';
@@ -8,6 +9,8 @@ import { initLisp } from './repl.js';
 import { initSecret } from './secret.js';
 
 const sheet = document.getElementById('sheet');
+
+openNotebook();
 
 initSketch();
 createDesk(sheet);

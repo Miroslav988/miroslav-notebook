@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Permanent+Marker&family=Special+Elite&family=Patrick+Hand&family=VT323&display=swap">
-<link rel="stylesheet" href="css/notebook.css?v=202609221137">
+<link rel="stylesheet" href="css/notebook.css?v=20260922114958">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -25,6 +25,24 @@
     </filter>
   </defs>
 </svg>
+<!-- The cover: opens on load (js/cover.js) -->
+<div class="cover" id="cover" aria-hidden="true">
+  <div class="cover-scene">
+    <div class="cover-front">
+      <div class="cover-face">
+        <div class="cover-label">
+          <span class="cover-name">Miroslav Bakaev</span>
+          <span class="cover-sub">full-stack engineer · notebook · 2026</span>
+        </div>
+        <div class="cover-band"></div>
+        <div class="cover-rings"></div>
+        <span class="cover-hint">tap to open</span>
+      </div>
+      <div class="cover-back"></div>
+    </div>
+  </div>
+</div>
+
 <main class="sheet" id="sheet">
 
   <!-- Desk objects: draggable, with a little physics (js/desk.js) -->
@@ -320,6 +338,6 @@
 </div>
 <div class="hint" id="hint"></div>
 
-<script type="module" src="js/main.js?v=202609221137"></script>
+<script type="module" src="js/main.js?v=20260922114958"></script>
 </body>
 </html>

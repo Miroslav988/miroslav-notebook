@@ -7,6 +7,9 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## What's on the page
 
+- **It opens.** The page loads as a closed notebook: a cardboard cover with a taped label and an elastic
+  band swings open in CSS 3D over the real first page, then the sticker lands. Tap or press a key to
+  skip; reduced-motion users get the open page straight away.
 - **Drawing layer.** The pencil case in the corner is real: pencil, two markers, a highlighter and an
   eraser. Strokes are smoothed with quadratic curves, support pen pressure and coalesced pointer events,
   and are stored in fractions of the page width so a drawing survives a resize. Nothing is saved.
@@ -34,6 +37,7 @@ Plain HTML, CSS and ES modules. No framework, no build step, no dependencies bey
 index.html          markup
 css/notebook.css    styles
 js/main.js          wires the modules together
+js/cover.js         the notebook cover that opens on load
 js/ink.js           drawing layer and pencil case
 js/fluid.js         ink as a fluid: the Stable Fluids solver, one tile per drop
 js/desk.js          draggable desk objects
