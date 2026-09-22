@@ -14,10 +14,10 @@
 const TILE_PX = 420; // css px, square
 const GRID = 96; // cells per side
 const ITERATIONS = 10;
-const DIFFUSION = 0.000012;
+const DIFFUSION = 0.000006;
 const VISCOSITY = 0.00004;
 const DT = 0.12;
-const DRY_RATE = 0.004;
+const DRY_RATE = 0.018;
 const IDLE_FRAMES = 90;
 
 class FluidTile {
@@ -153,7 +153,7 @@ class FluidTile {
     const { stain } = this;
     for (let k = 0; k < dens.length; k++) {
       const wet = dens[k];
-      if (wet > 0.02) {
+      if (wet > 0.006) {
         const dried = wet * DRY_RATE;
         stain[k] = Math.min(1, stain[k] + dried);
         dens[k] = wet - dried;
@@ -172,7 +172,7 @@ class FluidTile {
         const k = ix(i + 1, j + 1);
         const wet = this.dens[k];
         const dry = this.stain[k];
-        const raw = wet * 2.6 + Math.max(0, dry - 0.015) * 1.6;
+        const raw = wet * 2.2 + Math.max(0, dry - 0.01) * 1.5;
         const a = raw < 0.04 ? 0 : Math.min(1, raw);
         const o = (i + j * GRID) * 4;
         px[o] = 20 + dry * 14; // wet ink is blue-black and glossy,
@@ -252,13 +252,13 @@ export function createFluid(sheet) {
     drop(clientX, clientY) {
       const [x, y] = local(clientX, clientY);
       const angle = Math.random() * Math.PI * 2;
-      tileAt(x, y, true).splat(x, y, 4, 2.2, Math.cos(angle) * 0.45, Math.sin(angle) * 0.45);
+      tileAt(x, y, true).splat(x, y, 6, 2.4, Math.cos(angle) * 0.22, Math.sin(angle) * 0.22);
     },
     /** Dragging pushes the ink along the pointer's motion. */
     smear(clientX, clientY, dx, dy) {
       const [x, y] = local(clientX, clientY);
       const tile = tileAt(x, y, false);
-      if (tile) tile.splat(x, y, 2, 0.18, dx, dy);
+      if (tile) tile.splat(x, y, 3, 0.22, dx * 0.7, dy * 0.7);
     },
     clear() {
       tiles.forEach((t) => t.destroy());
