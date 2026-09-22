@@ -269,7 +269,7 @@
     .pencilcase { right: 8px; padding: 8px 8px 6px; gap: 4px; } .tool { width: 20px; height: 56px; } .tool.hl { width: 24px; }
     .pencilcase .label { display: none; }
     .pencilcase .toggle { display: flex; }
-    .pencilcase.collapsed { padding: 6px; border-radius: 50%; }
+    .pencilcase.collapsed { padding: 0; background: none; box-shadow: none; border-radius: 50%; }
     .pencilcase.collapsed .tool { display: none; }
     .hint { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); font-size: 17px; }
   }
