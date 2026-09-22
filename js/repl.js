@@ -24,6 +24,7 @@ export function initLisp(terminal) {
   let interp = null;
   let canvas = null;
   let pane = null;
+  let resizer = null;
 
   function enter() {
     canvas = document.createElement('canvas');
@@ -47,8 +48,8 @@ export function initLisp(terminal) {
         if (!src) throw new Error(`no such demo. try: ${Object.keys(DEMOS).join(', ')}`);
         return interp.run(src);
       },
-      print: (...xs) => terminal.print(xs.map(show).join(' ')),
-      help: () => terminal.print(HELP),
+      print: (...xs) => say(xs.map(show).join(' ')),
+      help: () => say(HELP.slice(1, 6).join('   ')),
     });
 
     pane = document.createElement('div');
@@ -56,12 +57,33 @@ export function initLisp(terminal) {
     terminal.lcd.innerHTML = '';
     terminal.lcd.classList.add('repl');
     terminal.lcd.append(canvas, pane);
+    fit();
+    resizer = new ResizeObserver(fit);
+    resizer.observe(terminal.lcd);
     terminal.enterMode(evaluate, KEYS_HTML, pane);
-    terminal.print(['λ ready. (help) for a tour, exit to leave.', HELP[1]]);
+    say('λ ready. (help) for the tour, exit to leave.');
     terminal.input.placeholder = '(repeat 36 (fd 90) (rt 170))';
   }
 
+  // The canvas takes the LCD minus one line of output, keeping its aspect.
+  function fit() {
+    if (!canvas) return;
+    const style = getComputedStyle(terminal.lcd);
+    const innerW = terminal.lcd.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const innerH = terminal.lcd.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom) - pane.offsetHeight - 6;
+    const w = Math.min(innerW, innerH * (W / H));
+    canvas.style.width = `${Math.floor(w)}px`;
+    canvas.style.height = `${Math.floor(w * (H / W))}px`;
+  }
+
+  // One line under the drawing: the latest result, error or note.
+  function say(text, cls) {
+    pane.innerHTML = '';
+    terminal.print(text, cls);
+  }
+
   function leave() {
+    if (resizer) resizer.disconnect();
     terminal.exitMode();
     terminal.lcd.classList.remove('repl');
     terminal.lcd.innerHTML = '';
@@ -73,16 +95,15 @@ export function initLisp(terminal) {
 
   function evaluate(line) {
     if (line.toLowerCase() === 'exit' || line.toLowerCase() === '(exit)') return leave();
-    terminal.print(`λ> ${line}`, 'in');
     // (demo tree) reads naturally but `tree` would be evaluated as a variable;
     // treat the demo name as a bare word instead of asking for a quote.
     const demo = line.match(/^\(\s*demo\s+'?([a-z]+)\s*\)$/i);
     try {
       const result = demo ? interp.run(DEMOS[demo[1].toLowerCase()] ?? `(demo "${demo[1]}")`) : interp.run(line);
       const text = show(result);
-      if (text) terminal.print(text);
+      say(text || 'ok');
     } catch (e) {
-      terminal.print(`error: ${e.message}`, 'err');
+      say(`error: ${e.message}`, 'err');
     }
   }
 
