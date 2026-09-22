@@ -14,6 +14,9 @@ const SPEED = 950; // px of line per second, in the heading's own pixels
 const HOP_MS = 28; // pause between strokes
 const WORD_MS = 70; // pause between words
 const STROKE_WIDTH = 0.11; // relative to font size
+let lettersWritten = 0;
+
+export const handwritingStats = { get letters() { return lettersWritten; } };
 
 function buildHeading(h2) {
   const textNode = [...h2.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
@@ -44,6 +47,7 @@ function buildHeading(h2) {
       strokes.push({ path });
     });
     x += g.w * scale;
+    if (ch !== ' ') lettersWritten++;
   }
   const width = x + 4;
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
