@@ -10,9 +10,9 @@
 
 import { GLYPHS, CAP_LINE, BASE_LINE } from './hershey.js';
 
-const SPEED = 520; // px of line per second, in the heading's own pixels
-const HOP_MS = 45; // pause between strokes
-const WORD_MS = 110; // pause between words
+const SPEED = 950; // px of line per second, in the heading's own pixels
+const HOP_MS = 28; // pause between strokes
+const WORD_MS = 70; // pause between words
 const STROKE_WIDTH = 0.11; // relative to font size
 
 function buildHeading(h2) {
@@ -55,17 +55,16 @@ function buildHeading(h2) {
 }
 
 function makePencil() {
+  // The same pencil that lies on the desk, held by its tip.
   const el = document.createElement('div');
   el.className = 'nib';
-  el.innerHTML =
-    '<svg width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">' +
-    '<g transform="rotate(-38 14 136)">' +
-    '<polygon points="14,136 32,128 32,144" fill="#35342f"/>' +
-    '<polygon points="30,126 52,122 52,150 30,146" fill="#e8cfa0"/>' +
-    '<rect x="52" y="122" width="150" height="28" fill="#d9a441"/>' +
-    '<rect x="52" y="122" width="150" height="9" fill="rgba(255,255,255,.28)"/>' +
-    '<rect x="52" y="141" width="150" height="9" fill="rgba(0,0,0,.14)"/>' +
-    '</g></svg>';
+  const desk = document.querySelector('.item.pencil svg');
+  const svg = desk ? desk.cloneNode(true) : null;
+  if (svg) {
+    svg.removeAttribute('aria-hidden');
+    svg.setAttribute('aria-hidden', 'true');
+    el.appendChild(svg);
+  }
   document.body.appendChild(el);
   return el;
 }
@@ -82,6 +81,7 @@ function schedule(strokes, scale) {
       const len = s.path.getTotalLength();
       s.path.style.strokeDasharray = `${len}`;
       s.path.style.strokeDashoffset = `${len}`;
+      s.path.style.opacity = '0'; // round caps would show a dot before the stroke begins
       const start = t;
       const dur = ((len * scale) / SPEED) * 1000;
       t += dur + HOP_MS;
@@ -105,9 +105,11 @@ function write({ svg, strokes, underline }) {
     let tip = null;
     for (const s of timeline) {
       if (elapsed >= s.start + s.dur) {
+        s.path.style.opacity = '1';
         s.path.style.strokeDashoffset = '0';
       } else if (elapsed >= s.start) {
         const t = (elapsed - s.start) / s.dur;
+        s.path.style.opacity = '1';
         s.path.style.strokeDashoffset = `${s.len * (1 - t)}`;
         tip = s.path.getPointAtLength(s.len * t);
         break;
@@ -119,11 +121,14 @@ function write({ svg, strokes, underline }) {
     if (tip) {
       const r = rect();
       const k = r.width / svg.viewBox.baseVal.width;
-      pencil.style.transform = `translate(${r.left + tip.x * k - 14}px, ${r.top + tip.y * k - 136 + window.scrollY}px)`;
+      pencil.style.transform = `translate(${r.left + tip.x * k - 4}px, ${r.top + tip.y * k - 13 + window.scrollY}px) rotate(-38deg)`;
     }
     if (elapsed < total) requestAnimationFrame(tick);
     else {
-      timeline.forEach((s) => (s.path.style.strokeDashoffset = '0'));
+      timeline.forEach((s) => {
+        s.path.style.opacity = '1';
+        s.path.style.strokeDashoffset = '0';
+      });
       if (underline) underline.classList.add('on');
       pencil.classList.add('lift');
       setTimeout(() => pencil.remove(), 600);
