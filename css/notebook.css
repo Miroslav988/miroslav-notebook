@@ -118,7 +118,7 @@
   .stack-list li small { color: var(--graphite-soft); font-size: 18px; }
 
 /* ---------- charts, drawn in on scroll ---------- */
-  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px 40px; align-items: start; }
+  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 28px 32px; align-items: start; }
   .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
   .chart .cap { margin-top: 6px; font-size: 21px; }
   .draw path.stroke { stroke-dasharray: var(--len, 1000); stroke-dashoffset: var(--len, 1000); opacity: 0; } /* round caps would show a dot before the line is drawn */

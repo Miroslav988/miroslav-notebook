@@ -36,6 +36,7 @@ const RESPONSES = {
   numbers: [
     'cloud spend after infra rebuild ...... -50%',
     'feature delivery cycle ......... 14d -> 3-4d',
+    'one record through the pipeline .. 12s -> 3s',
     'years shipping ........................ 4+',
     'companies, one of them my own ........... 3',
     'production RAG pipelines shipped ........ 2',

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Permanent+Marker&family=Special+Elite&family=Patrick+Hand&family=VT323&display=swap">
-<link rel="stylesheet" href="css/notebook.css?v=20260922134435">
+<link rel="stylesheet" href="css/notebook.css?v=20260922144742">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -157,7 +157,7 @@
     <div class="doodle hide-sm" style="right: -16px; top: 30px;" aria-hidden="true">
       <svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="36" r="24" fill="none" stroke="#6d6a61" stroke-width="2"/><path d="M 35 20 L 35 36 L 47 44" fill="none" stroke="#6d6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 29 8 L 41 8" stroke="#6d6a61" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
-    <h2>Two numbers from the last rebuild<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 7 C 80 12, 140 2, 220 8 S 280 10, 298 6"/></svg></h2>
+    <h2>Three numbers from the last rebuild<svg class="ul draw" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path class="stroke" d="M2 7 C 80 12, 140 2, 220 8 S 280 10, 298 6"/></svg></h2>
     <div class="charts">
       <figure class="chart" style="margin:0">
         <svg class="draw" viewBox="0 0 320 210" role="img" aria-label="Cloud spend: before the infrastructure rework 100%, after about 50%">
@@ -186,6 +186,21 @@
           <text x="170" y="200" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6b675d">Claude Code + Cursor in the workflow, with review</text>
         </svg>
         <figcaption class="cap">AI in the loop, reviewed line by line. Used blindly it ships vulnerabilities; used with review it halved the cycle.</figcaption>
+      </figure>
+      <figure class="chart" style="margin:0">
+        <svg class="draw" viewBox="0 0 320 210" role="img" aria-label="Seconds per record: about 12 by hand, about 3 through the parsing pipeline">
+          <path class="stroke" d="M40 18 C 41 60, 39 120, 40 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round"/>
+          <path class="stroke" d="M40 178 C 100 179, 200 177, 300 178" fill="none" stroke="#6b675d" stroke-width="2" stroke-linecap="round" style="--d:.2s"/>
+          <path class="bar" d="M42 52 L 288 50 C 290 62, 289 76, 286 88 L 42 90 Z" fill="#d3372b" opacity=".85" style="--d:.5s"/>
+          <path class="bar" d="M42 118 L 104 116 C 106 128, 105 142, 102 154 L 42 156 Z" fill="#2f9a57" opacity=".85" style="--d:.9s"/>
+          <text class="lbl" x="250" y="44" text-anchor="middle" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:1.1s">~12 s</text>
+          <text class="lbl" x="114" y="142" text-anchor="start" font-family="Caveat" font-weight="600" font-size="20" fill="#3b3a36" style="--d:1.5s">~3 s</text>
+          <text x="48" y="44" font-family="Caveat" font-size="18" fill="#6b675d">a person, typing</text>
+          <text x="48" y="110" font-family="Caveat" font-size="18" fill="#6b675d">the pipeline</text>
+          <text x="46" y="14" font-family="Caveat" font-size="17" fill="#6b675d">seconds per record</text>
+          <text x="170" y="200" text-anchor="middle" font-family="Caveat" font-size="18" fill="#6b675d">manual intake, now a background job</text>
+        </svg>
+        <figcaption class="cap">A department was entering records by hand. The parsing pipeline took the job: four times faster, and nobody types.</figcaption>
       </figure>
     </div>
   </section>
@@ -315,6 +330,6 @@
 </div>
 <div class="hint" id="hint"></div>
 
-<script type="module" src="js/main.js?v=20260922143622"></script>
+<script type="module" src="js/main.js?v=20260922144742"></script>
 </body>
 </html>
