@@ -295,5 +295,4 @@ export function initEggGame(terminal) {
   );
 
   terminal.register(['egg', 'play', 'nu pogodi'], start);
-  terminal.gauge('eggs caught, best run', () => game.best);
 }

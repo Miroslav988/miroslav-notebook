@@ -6,7 +6,7 @@ import { initEggGame } from './egg.js';
 import { initLisp } from './repl.js';
 import { initSecret } from './secret.js';
 import { initPaper } from './paper.js';
-import { writeHeadings, handwritingStats } from './handwriting.js';
+import { writeHeadings } from './handwriting.js';
 
 const sheet = document.getElementById('sheet');
 
@@ -18,8 +18,5 @@ initSecret(ink);
 const terminal = createTerminal();
 initEggGame(terminal);
 initLisp(terminal);
-terminal.gauge('strokes drawn by you', () => ink.strokeCount);
-terminal.gauge('things you erased', () => ink.erasedCount);
-terminal.gauge('letters the pencil wrote', () => handwritingStats.letters);
 writeHeadings();
 initPaper();

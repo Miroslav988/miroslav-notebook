@@ -312,12 +312,6 @@ export function createInk(sheet) {
     get tool() {
       return tool;
     },
-    get strokeCount() {
-      return strokes.length;
-    },
-    get erasedCount() {
-      return strokes.filter((s) => s.tool === 'eraser').length;
-    },
     showHint,
     /** Called with the pointer position for every eraser sample. */
     onErase(fn) {

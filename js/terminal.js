@@ -151,11 +151,6 @@ function uptime() {
   ];
 }
 
-function dots(label, value, width = 44) {
-  const text = String(value);
-  return `${label} ${'.'.repeat(Math.max(1, width - label.length - text.length))} ${text}`;
-}
-
 function calculate(expr) {
   try {
     const value = Function(`"use strict"; return (${expr.replace(/%/g, '/100')})`)();
@@ -173,10 +168,8 @@ export function createTerminal() {
   const defaultKeys = keys.innerHTML;
   const history = [];
   const commands = new Map();
-  const gauges = new Map(); // live numbers other modules report (drawing, game, handwriting)
   let historyIndex = -1;
   let locked = false;
-  const opened = performance.now();
   let mode = null; // a handler that owns the input line (the Lisp REPL)
   let output = lcd; // where print() writes; a mode may swap in its own pane
 
@@ -218,21 +211,11 @@ export function createTerminal() {
     if (cmd === 'fortune') return print(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]);
     if (cmd === 'history') return print(history.slice(0, -1).map((h, i) => `${i + 1}  ${h}`).join('\n') || '(empty)');
     if (cmd === 'sudo hire' || cmd === 'hire') return print('permission granted. write to mirokbaka@gmail.com');
-    if (cmd === 'numbers') return print([...RESPONSES.numbers, '', 'this page, right now:', ...liveNumbers()]);
+    if (cmd === 'numbers') return print(RESPONSES.numbers);
     if (RESPONSES[cmd]) return print(RESPONSES[cmd]);
     if (cmd.startsWith('cat ')) return print(`cat: ${cmd.slice(4)}: no such file`, 'err');
     if (ARITHMETIC.test(cmd)) return print(calculate(cmd));
     return print(`ERR: unknown command "${cmd}". try help`, 'err');
-  }
-
-  function liveNumbers() {
-    const lines = [
-      dots('es modules loaded', performance.getEntriesByType('resource').filter((r) => /\/js\/.*\.js/.test(r.name)).length + 1),
-      dots('terminal commands', Object.keys(RESPONSES).length + commands.size + 7),
-      dots('minutes on this page', Math.max(1, Math.round((performance.now() - opened) / 60000))),
-    ];
-    gauges.forEach((get, label) => lines.push(dots(label, get())));
-    return lines;
   }
 
   function bindKeys() {
@@ -304,10 +287,6 @@ export function createTerminal() {
     },
     get input() {
       return input;
-    },
-    /** Register a live number for `numbers`: a label and a getter. */
-    gauge(label, get) {
-      gauges.set(label, get);
     },
     /** Hand the LCD and the key row to another mode (the game). */
     lock(keysHtml) {
