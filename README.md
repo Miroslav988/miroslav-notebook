@@ -15,6 +15,10 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
   off the sheet's edges.
 - **Pocket terminal.** A small command line (`help` lists the commands). It answers things the page
   itself doesn't say, keeps a history, and doubles as a calculator. One command isn't listed.
+- **A Lisp.** `lisp` opens a REPL for a small Scheme-flavoured language written from scratch for this
+  page: reader, evaluator with closures and proper environments, `define`/`lambda`/`let`/`cond`, lists,
+  `map`/`filter`/`reduce`, a step budget so infinite loops can't hang the tab, and turtle graphics on
+  the LCD: `(repeat 36 (fd 90) (rt 170))`, `(demo tree)` for a recursive tree.
 - **Charts and doodles drawn in.** SVG strokes are measured at load and animated as the reader scrolls
   to them. Doodles get a pencil-wobble filter and a second, fainter stroke so they don't read as icons.
 - **The egg.** Find it, erase it, type it.
@@ -31,6 +35,8 @@ js/ink.js           drawing layer and pencil case
 js/desk.js          draggable desk objects
 js/terminal.js      pocket terminal and its commands
 js/egg.js           the hidden game
+js/lisp.js          the Lisp: reader, evaluator, builtins, turtle
+js/repl.js          the `lisp` command: REPL mode and the turtle canvas
 js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
 ```

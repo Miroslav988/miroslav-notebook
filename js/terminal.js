@@ -11,6 +11,7 @@ const RESPONSES = {
     'commands: stack, experience, projects, numbers, contact',
     '          path, origin, renairo, flame, desk, story, wiki',
     '          decisions, uptime, fortune, whoami, ls, cat <file>, now, clear',
+    '          lisp  (a small Lisp with turtle graphics, written for this page)',
     '(one more is not listed)',
   ],
   stack: [
@@ -164,31 +165,36 @@ export function createTerminal() {
   const commands = new Map();
   let historyIndex = -1;
   let locked = false;
+  let mode = null; // a handler that owns the input line (the Lisp REPL)
+  let output = lcd; // where print() writes; a mode may swap in its own pane
 
   function print(lines, cls) {
     (Array.isArray(lines) ? lines : [lines]).forEach((line) => {
       const row = document.createElement('div');
       if (cls) row.className = cls;
       row.textContent = line;
-      lcd.appendChild(row);
+      output.appendChild(row);
     });
-    lcd.scrollTop = lcd.scrollHeight;
+    output.scrollTop = output.scrollHeight;
   }
 
   function clear() {
-    lcd.innerHTML = '';
+    output.innerHTML = '';
   }
 
   function run(raw) {
-    const cmd = (raw || '').trim().toLowerCase().replace(/\s+/g, ' ');
-    if (!cmd) return;
+    const line = (raw || '').trim();
+    if (!line) return;
     if (locked) {
       print('game running. arrows / WASD to move, Esc to quit', 'err');
       return;
     }
-    print(`> ${cmd}`, 'in');
-    history.push(cmd);
+    history.push(line);
     historyIndex = -1;
+    if (mode) return mode(line);
+
+    const cmd = line.toLowerCase().replace(/\s+/g, ' ');
+    print(`> ${cmd}`, 'in');
 
     if (['clear', 'c', 'cls'].includes(cmd)) return clear();
     if (commands.has(cmd)) return commands.get(cmd)();
@@ -211,6 +217,15 @@ export function createTerminal() {
       key.addEventListener('click', () => {
         run(key.dataset.cmd);
         if (!locked) input.focus({ preventScroll: true });
+      });
+    });
+    keys.querySelectorAll('.key[data-insert]').forEach((key) => {
+      key.addEventListener('click', () => {
+        const text = key.dataset.insert;
+        const at = input.selectionStart ?? input.value.length;
+        input.value = input.value.slice(0, at) + text + input.value.slice(at);
+        input.focus({ preventScroll: true });
+        input.setSelectionRange(at + text.length, at + text.length);
       });
     });
   }
@@ -246,6 +261,26 @@ export function createTerminal() {
     clear,
     register(names, handler) {
       (Array.isArray(names) ? names : [names]).forEach((name) => commands.set(name, handler));
+    },
+    /** Route every input line to `handler` until it calls exit(); swap the key row meanwhile. */
+    enterMode(handler, keysHtml, pane) {
+      mode = handler;
+      output = pane || lcd;
+      if (keysHtml) {
+        keys.innerHTML = keysHtml;
+        keys.classList.add('mode');
+        bindKeys();
+      }
+    },
+    exitMode() {
+      mode = null;
+      output = lcd;
+      keys.innerHTML = defaultKeys;
+      keys.classList.remove('mode');
+      bindKeys();
+    },
+    get input() {
+      return input;
     },
     /** Hand the LCD and the key row to another mode (the game). */
     lock(keysHtml) {

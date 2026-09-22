@@ -3,6 +3,7 @@ import { createInk } from './ink.js';
 import { createDesk } from './desk.js';
 import { createTerminal } from './terminal.js';
 import { initEggGame } from './egg.js';
+import { initLisp } from './repl.js';
 import { initSecret } from './secret.js';
 
 const sheet = document.getElementById('sheet');
@@ -11,4 +12,6 @@ initSketch();
 createDesk(sheet);
 const ink = createInk(sheet);
 initSecret(ink);
-initEggGame(createTerminal());
+const terminal = createTerminal();
+initEggGame(terminal);
+initLisp(terminal);

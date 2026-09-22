@@ -218,6 +218,10 @@
   .facts p { font-size: 21px; }
   .facts b { color: var(--marker-blue); font-weight: 600; }
   .lcd canvas.game { display: block; height: 100%; width: auto; max-width: 100%; margin: 0 auto; }
+  .lcd.repl { display: flex; flex-direction: column; padding: 8px 12px 10px; overflow: hidden; }
+  .lcd.repl canvas.turtle { display: block; width: 100%; max-width: 380px; height: auto; margin: 0 auto 6px; flex: 0 0 auto; border-bottom: 1px dashed rgba(28,42,30,.35); }
+  .lcd .repl-out { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  .device .keys.mode .key { font-family: 'VT323', monospace; font-size: 20px; letter-spacing: .5px; }
   .lcd.playing { padding: 8px; overflow: hidden; display: flex; justify-content: center; }
   .device .keys.game { grid-template-columns: 96px 96px 1fr 96px 96px; grid-template-rows: 54px 54px; gap: 10px; max-width: 640px; margin-inline: auto; }
   .device .keys.game .key { font-size: 22px; padding: 0; height: 54px; }
