@@ -31,9 +31,13 @@ const SHORTCUTS = { 1: 'pencil', 2: 'pen', 3: 'red', 4: 'hl', 5: 'eraser' };
 const MAX_STROKES = 600;
 const BASE_WIDTH = 960;
 
-// the sheet's ruling, so the eraser can paint it back
+// the sheet's ruling and grain, so the eraser can paint them back
 const PAPER = { color: '#f5f1e6', line: '#c3cfdb', lineEvery: 32, lineAt: 13, margin: '#d98b86', marginX: 62 };
 const PRINTOUT = '#fffdf7';
+const GRAIN_SVG =
+  "<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>";
+const grain = new Image();
+grain.src = `data:image/svg+xml;utf8,${encodeURIComponent(GRAIN_SVG)}`;
 
 export function createInk(sheet) {
   const buttons = [...document.querySelectorAll('.tool[data-tool]')];
@@ -72,19 +76,25 @@ export function createInk(sheet) {
   function paperFill(s) {
     if (s.kind !== 'sheet') return PRINTOUT;
     if (s.pattern) return s.pattern;
+    // the tile is 220px tall: the ruling repeats every 32px and the grain every 220px,
+    // so one 32*220 tile lines up with both
     const tile = document.createElement('canvas');
     const w = s.el.clientWidth;
+    const th = 220 * 32 / 4; // 1760: a common multiple of 220 and 32
     tile.width = Math.round(w * s.dpr);
-    tile.height = Math.round(PAPER.lineEvery * s.dpr);
+    tile.height = Math.round(th * s.dpr);
     const c = tile.getContext('2d');
     c.scale(s.dpr, s.dpr);
     c.fillStyle = PAPER.color;
-    c.fillRect(0, 0, w, PAPER.lineEvery);
+    c.fillRect(0, 0, w, th);
+    if (grain.complete && grain.naturalWidth) {
+      for (let y = 0; y < th; y += 220) for (let x = 0; x < w; x += 220) c.drawImage(grain, x, y);
+    }
     c.fillStyle = PAPER.line;
-    c.fillRect(0, PAPER.lineAt, w, 1);
+    for (let y = PAPER.lineAt; y < th; y += PAPER.lineEvery) c.fillRect(0, y, w, 1);
     c.fillStyle = PAPER.margin;
     c.globalAlpha = 0.8;
-    c.fillRect(PAPER.marginX, 0, 2, PAPER.lineEvery);
+    c.fillRect(PAPER.marginX, 0, 2, th);
     s.pattern = s.ctx.createPattern(tile, 'repeat');
     // pattern space is device pixels; scale it back to css pixels
     const m = new DOMMatrix().scale(1 / s.dpr);
@@ -126,6 +136,10 @@ export function createInk(sheet) {
   // ---- input ----------------------------------------------------------
 
   const sheetSurface = addSurface(sheet, document.getElementById('ink'), 'sheet');
+  grain.addEventListener('load', () => {
+    sheetSurface.pattern = null;
+    redraw(sheetSurface);
+  });
   document.querySelectorAll('.clip').forEach((clip) => {
     const canvas = document.createElement('canvas');
     canvas.className = 'ink-layer';
