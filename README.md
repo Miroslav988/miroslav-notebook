@@ -7,10 +7,10 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## What's on the page
 
-- **Headings write themselves.** As a section scrolls into view its heading is re-set as SVG from the
-  real glyph outlines of Permanent Marker (the font file is parsed in the browser with opentype.js), a
-  marker tip writes it left to right, and the sketched underline is drawn once the last letter is done. If the
-  font or the parser fails, the plain headings stay.
+- **A pencil writes the headings.** Section headings are set in a stroke font (Hershey Script Complex,
+  Allen V. Hershey's 1967 plotter font, public domain), so each letter is a set of pen paths rather than
+  an outline. As a heading scrolls into view a pencil travels those paths at a steady speed and the line
+  appears behind its tip, hopping between strokes; then the sketched underline draws itself.
 - **Paper that lifts.** Taped-in printouts tilt towards the pointer as if you were about to peel them off;
   the sticker's corner curls on hover.
 - **Drawing layer.** The pencil case in the corner is real: pencil, two markers, a highlighter and an
@@ -31,8 +31,7 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## Stack
 
-Plain HTML, CSS and ES modules. No framework, no build step. The only third-party code is opentype.js,
-loaded from a CDN for the handwriting; the page works without it.
+Plain HTML, CSS and ES modules. No framework, no build step, no dependencies beyond Google Fonts.
 
 ```
 index.html          markup
@@ -46,9 +45,9 @@ js/lisp.js          the Lisp: reader, evaluator, builtins, turtle
 js/repl.js          the `lisp` command: REPL mode and the turtle canvas
 js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
-js/handwriting.js   headings written glyph by glyph from the font's outlines
+js/handwriting.js   the pencil that writes the headings
+js/hershey.js       stroke-font data for the characters the page uses
 js/paper.js         printouts that lift towards the pointer
-fonts/              Permanent Marker (Apache 2.0) and Caveat (OFL), with licenses
 ```
 
 ## Run locally

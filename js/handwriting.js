@@ -1,137 +1,148 @@
 /**
- * Section headings write themselves as they scroll into view.
+ * Section headings are written by a pencil as they scroll into view.
  *
- * The heading text is re-set as SVG from the real glyph outlines of Permanent
- * Marker (the font file in /fonts, parsed in the browser with opentype.js).
- * Each glyph is revealed left to right behind a moving clip, the way a marker
- * lays down a letter, with the marker tip travelling along; when the last
- * letter is done the underline sketch beneath the heading is drawn. If the font or
- * the parser fails to load, the headings stay as plain text and the
- * underlines draw on their own.
+ * The heading text is set in a stroke font (see hershey.js), so every letter
+ * is a set of pen paths rather than an outline. The pencil travels along
+ * those paths at a steady speed and the line appears behind its tip; between
+ * strokes it lifts and hops. When the last stroke is done, the sketched
+ * underline beneath the heading draws itself.
  */
 
-const FONT_URL = 'fonts/PermanentMarker-Regular.ttf';
-const PARSER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js';
-const GLYPH_MS = 90; // pace: one letter every 90 ms
-let clipCounter = 0;
+import { GLYPHS, CAP_LINE, BASE_LINE } from './hershey.js';
 
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
+const SPEED = 520; // px of line per second, in the heading's own pixels
+const HOP_MS = 45; // pause between strokes
+const WORD_MS = 110; // pause between words
+const STROKE_WIDTH = 0.11; // relative to font size
 
-function buildHeading(font, h2) {
+function buildHeading(h2) {
   const textNode = [...h2.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
   if (!textNode) return null;
   const text = textNode.textContent.trim();
-  const style = getComputedStyle(h2);
-  const size = parseFloat(style.fontSize);
-  const width = font.getAdvanceWidth(text, size) + 4;
-  const height = size * 1.25;
-  const baseline = size * 0.95;
+  const size = parseFloat(getComputedStyle(h2).fontSize);
+  const scale = (size * 0.78) / (BASE_LINE - CAP_LINE); // cap height ≈ 78% of the font size
+  const baseline = size * 0.9;
+  const height = size * 1.3;
+  const NS = 'http://www.w3.org/2000/svg';
 
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-  svg.setAttribute('width', width);
-  svg.setAttribute('height', height);
+  const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('class', 'handwriting');
   svg.setAttribute('role', 'img');
   svg.setAttribute('aria-label', text);
 
-  const NS = 'http://www.w3.org/2000/svg';
-  const defs = document.createElementNS(NS, 'defs');
-  svg.appendChild(defs);
-  const glyphs = [];
-  let x = 2;
-  for (const glyph of font.stringToGlyphs(text)) {
-    const advance = (glyph.advanceWidth / font.unitsPerEm) * size;
-    const x0 = x;
-    x += advance;
-    const path2d = glyph.getPath(x0, baseline, size);
-    const d = path2d.toPathData(2);
-    if (!d) continue;
-    const box = path2d.getBoundingBox();
-    const id = `hw-clip-${clipCounter++}`;
-    const clip = document.createElementNS(NS, 'clipPath');
-    clip.setAttribute('id', id);
-    const rect = document.createElementNS(NS, 'rect');
-    rect.setAttribute('x', box.x1 - 2);
-    rect.setAttribute('y', 0);
-    rect.setAttribute('width', 0);
-    rect.setAttribute('height', height);
-    clip.appendChild(rect);
-    defs.appendChild(clip);
-    const path = document.createElementNS(NS, 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('clip-path', `url(#${id})`);
-    svg.appendChild(path);
-    glyphs.push({ rect, x0: box.x1 - 2, w: box.x2 - box.x1 + 4, y: baseline - size * 0.4 });
+  const strokes = [];
+  let x = 4;
+  for (const ch of text) {
+    const g = GLYPHS[ch] || GLYPHS[' '];
+    if (ch === ' ') strokes.push({ pause: WORD_MS });
+    g.s.forEach((pts) => {
+      const d = pts.map(([px, py], i) => `${i ? 'L' : 'M'}${(x + (px - g.l) * scale).toFixed(1)} ${(baseline + py * scale).toFixed(1)}`).join(' ');
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke-width', (size * STROKE_WIDTH).toFixed(2));
+      svg.appendChild(path);
+      strokes.push({ path });
+    });
+    x += g.w * scale;
   }
+  const width = x + 4;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
   h2.replaceChild(svg, textNode);
   h2.classList.add('writing');
-  return { svg, glyphs, underline: h2.querySelector('.ul') };
+  return { svg, strokes, underline: h2.querySelector('.ul') };
 }
 
-function makeNib() {
-  const nib = document.createElement('div');
-  nib.className = 'nib';
-  nib.innerHTML = '<svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><path d="M14 44 L 22 26 L 44 4 L 52 12 L 30 34 Z" fill="#24437a"/><path d="M14 44 L 22 26 L 30 34 Z" fill="#c9bfae"/><path d="M44 4 L 52 12 L 48 16 L 40 8 Z" fill="#1a2f55"/></svg>';
-  document.body.appendChild(nib);
-  return nib;
+function makePencil() {
+  const el = document.createElement('div');
+  el.className = 'nib';
+  el.innerHTML =
+    '<svg width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">' +
+    '<g transform="rotate(-38 14 136)">' +
+    '<polygon points="14,136 32,128 32,144" fill="#35342f"/>' +
+    '<polygon points="30,126 52,122 52,150 30,146" fill="#e8cfa0"/>' +
+    '<rect x="52" y="122" width="150" height="28" fill="#d9a441"/>' +
+    '<rect x="52" y="122" width="150" height="9" fill="rgba(255,255,255,.28)"/>' +
+    '<rect x="52" y="141" width="150" height="9" fill="rgba(0,0,0,.14)"/>' +
+    '</g></svg>';
+  document.body.appendChild(el);
+  return el;
 }
 
-function write({ svg, glyphs, underline }) {
-  const nib = makeNib();
+/** Build a timeline: for each stroke, when it starts and how long it takes. */
+function schedule(strokes, scale) {
+  let t = 0;
+  return strokes
+    .map((s) => {
+      if (s.pause) {
+        t += s.pause;
+        return null;
+      }
+      const len = s.path.getTotalLength();
+      s.path.style.strokeDasharray = `${len}`;
+      s.path.style.strokeDashoffset = `${len}`;
+      const start = t;
+      const dur = ((len * scale) / SPEED) * 1000;
+      t += dur + HOP_MS;
+      return { path: s.path, len, start, dur };
+    })
+    .filter(Boolean);
+}
+
+function write({ svg, strokes, underline }) {
+  const pencil = makePencil();
+  const rect = () => svg.getBoundingClientRect();
+  const scale = rect().width / svg.viewBox.baseVal.width;
+  const timeline = schedule(strokes, scale);
+  const last = timeline[timeline.length - 1];
+  const total = last ? last.start + last.dur : 0;
   const start = performance.now();
-  nib.classList.add('show');
+  pencil.classList.add('show');
 
   function tick(now) {
     const elapsed = now - start;
-    const index = Math.min(glyphs.length - 1, Math.floor(elapsed / GLYPH_MS));
-    const t = Math.min(1, (elapsed - index * GLYPH_MS) / GLYPH_MS);
-    glyphs.forEach((g, k) => g.rect.setAttribute('width', k < index ? g.w : k === index ? g.w * t : 0));
-    const g = glyphs[index];
-    const r = svg.getBoundingClientRect();
-    const scale = r.width / svg.viewBox.baseVal.width;
-    nib.style.transform = `translate(${r.left + (g.x0 + g.w * t) * scale - 14}px, ${r.top + g.y * scale - 44 + window.scrollY}px)`;
-    if (elapsed < glyphs.length * GLYPH_MS) requestAnimationFrame(tick);
+    let tip = null;
+    for (const s of timeline) {
+      if (elapsed >= s.start + s.dur) {
+        s.path.style.strokeDashoffset = '0';
+      } else if (elapsed >= s.start) {
+        const t = (elapsed - s.start) / s.dur;
+        s.path.style.strokeDashoffset = `${s.len * (1 - t)}`;
+        tip = s.path.getPointAtLength(s.len * t);
+        break;
+      } else {
+        tip = s.path.getPointAtLength(0); // hopping to the next stroke
+        break;
+      }
+    }
+    if (tip) {
+      const r = rect();
+      const k = r.width / svg.viewBox.baseVal.width;
+      pencil.style.transform = `translate(${r.left + tip.x * k - 14}px, ${r.top + tip.y * k - 136 + window.scrollY}px)`;
+    }
+    if (elapsed < total) requestAnimationFrame(tick);
     else {
-      glyphs.forEach((gl) => gl.rect.setAttribute('width', gl.w));
+      timeline.forEach((s) => (s.path.style.strokeDashoffset = '0'));
       if (underline) underline.classList.add('on');
-      nib.classList.add('lift');
-      setTimeout(() => nib.remove(), 600);
+      pencil.classList.add('lift');
+      setTimeout(() => pencil.remove(), 600);
     }
   }
   requestAnimationFrame(tick);
 }
 
-export async function writeHeadings() {
+export function writeHeadings() {
   const headings = [...document.querySelectorAll('h2')];
   const underlines = () => headings.forEach((h) => h.querySelector('.ul')?.classList.add('on'));
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!headings.length || reduced || !window.fetch) return underlines();
-  document.documentElement.classList.add('handwriting');
-
-  let font;
-  try {
-    await loadScript(PARSER_URL);
-    font = window.opentype.parse(await (await fetch(FONT_URL)).arrayBuffer());
-  } catch {
-    document.documentElement.classList.remove('handwriting');
-    return underlines();
-  }
+  if (!headings.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return underlines();
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
-        const built = buildHeading(font, entry.target);
+        const built = buildHeading(entry.target);
         if (built) write(built);
         else entry.target.querySelector('.ul')?.classList.add('on');
       });

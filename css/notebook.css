@@ -285,10 +285,10 @@
 /* mobile: the REPL canvas stays inside the LCD */
 .device { position: relative; z-index: 21; }
 
-/* ---------- headings write themselves ---------- */
-h2 .handwriting { display: inline-block; vertical-align: baseline; height: 1.25em; width: auto; overflow: visible; }
-h2 .handwriting path { fill: var(--marker-blue); }
-.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; filter: drop-shadow(3px 6px 4px rgba(0,0,0,.35)); }
+/* ---------- headings written by a pencil ---------- */
+h2 .handwriting { display: inline-block; vertical-align: baseline; height: 1.3em; width: auto; overflow: visible; }
+h2 .handwriting path { fill: none; stroke: var(--marker-blue); stroke-linecap: round; stroke-linejoin: round; }
+.nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; filter: drop-shadow(4px 8px 5px rgba(0,0,0,.3)); }
 .nib.show { opacity: 1; }
 .nib.lift { transition: transform .45s ease-in, opacity .45s; transform: translate(0, 0) !important; opacity: 0; }
 
