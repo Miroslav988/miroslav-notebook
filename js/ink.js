@@ -1,14 +1,17 @@
 /**
  * Drawing layer and pencil case.
  *
- * There is one drawing surface over the sheet and one over every taped-in
- * printout. A stroke belongs to the surface it started on, so ink drawn on a
- * printout moves with that printout. Strokes are stored in fractions of their
- * surface's width and survive a resize. Nothing is persisted.
+ * There is one drawing surface over the sheet and one over everything stuck
+ * onto it: printouts, sticky notes, the business card, the name sticker. A
+ * stroke is cut wherever it crosses from one surface to another, so ink drawn
+ * across a printout's edge tears along that edge when the printout moves.
+ * Strokes are stored in fractions of their surface's width and survive a
+ * resize. Nothing is persisted.
  *
- * The eraser is a real eraser: it paints paper back over whatever is under it,
- * ruled paper on the sheet, plain paper on a printout, so text, doodles and
- * drawings alike can be rubbed out.
+ * The eraser is a real eraser: it paints each surface's own material back over
+ * whatever is under it, ruled paper on the sheet, white on a printout, the
+ * sticker's red and white on the sticker, so text, doodles and drawings alike
+ * can be rubbed out.
  */
 
 const TOOLS = {
@@ -52,8 +55,8 @@ export function createInk(sheet) {
 
   // ---- surfaces -------------------------------------------------------
 
-  function addSurface(el, canvas, kind) {
-    const s = { el, canvas, kind, ctx: canvas.getContext('2d'), dpr: 1, pattern: null };
+  function addSurface(el, canvas, kind, material) {
+    const s = { el, canvas, kind, material, ctx: canvas.getContext('2d'), dpr: 1, pattern: null };
     surfaces.push(s);
     new ResizeObserver(() => resize(s)).observe(el);
     resize(s);
@@ -72,15 +75,20 @@ export function createInk(sheet) {
     redraw(s);
   }
 
-  /** What the eraser paints: ruled paper aligned with the sheet, or plain printout paper. */
+  /** What the eraser paints on a surface: its own material, aligned with it. */
   function paperFill(s) {
-    if (s.kind !== 'sheet') return PRINTOUT;
     if (s.pattern) return s.pattern;
-    // the tile is 220px tall: the ruling repeats every 32px and the grain every 220px,
-    // so one 32*220 tile lines up with both
+    if (s.kind === 'sheet') s.pattern = ruledPaper(s);
+    else if (typeof s.material === 'function') s.pattern = s.material(s);
+    else s.pattern = s.material;
+    return s.pattern;
+  }
+
+  function ruledPaper(s) {
+    // the tile is 1760px tall: the ruling repeats every 32px and the grain every 220px
     const tile = document.createElement('canvas');
     const w = s.el.clientWidth;
-    const th = 220 * 32 / 4; // 1760: a common multiple of 220 and 32
+    const th = 1760;
     tile.width = Math.round(w * s.dpr);
     tile.height = Math.round(th * s.dpr);
     const c = tile.getContext('2d');
@@ -95,11 +103,31 @@ export function createInk(sheet) {
     c.fillStyle = PAPER.margin;
     c.globalAlpha = 0.8;
     c.fillRect(PAPER.marginX, 0, 2, th);
-    s.pattern = s.ctx.createPattern(tile, 'repeat');
-    // pattern space is device pixels; scale it back to css pixels
-    const m = new DOMMatrix().scale(1 / s.dpr);
-    s.pattern.setTransform(m);
-    return s.pattern;
+    return patternOf(s, tile);
+  }
+
+  /** The HELLO sticker: red band on top, white below. */
+  function stickerPaper(s) {
+    const tile = document.createElement('canvas');
+    const w = s.el.clientWidth;
+    const h = s.el.clientHeight;
+    const band = s.el.querySelector('.top');
+    const bandH = band ? band.offsetHeight : h * 0.45;
+    tile.width = Math.round(w * s.dpr);
+    tile.height = Math.round(h * s.dpr);
+    const c = tile.getContext('2d');
+    c.scale(s.dpr, s.dpr);
+    c.fillStyle = '#fff';
+    c.fillRect(0, 0, w, h);
+    c.fillStyle = band ? getComputedStyle(band).backgroundColor : '#b8392e';
+    c.fillRect(0, 0, w, bandH);
+    return patternOf(s, tile);
+  }
+
+  function patternOf(s, tile) {
+    const pattern = s.ctx.createPattern(tile, 'repeat');
+    pattern.setTransform(new DOMMatrix().scale(1 / s.dpr)); // pattern space is device pixels
+    return pattern;
   }
 
   function redraw(s) {
@@ -119,7 +147,7 @@ export function createInk(sheet) {
     ctx.strokeStyle = t.paper ? paperFill(stroke.surface) : t.color;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    const scale = stroke.surface.kind === 'sheet' ? w / BASE_WIDTH : 1;
+    const scale = stroke.surface.kind === 'sheet' ? w / BASE_WIDTH : Math.min(1, sheet.clientWidth / BASE_WIDTH);
     ctx.lineWidth = t.width * stroke.pressure * scale;
     const p = stroke.points.map(([x, y]) => [x * w, y * w]);
     ctx.beginPath();
@@ -135,23 +163,31 @@ export function createInk(sheet) {
 
   // ---- input ----------------------------------------------------------
 
-  const sheetSurface = addSurface(sheet, document.getElementById('ink'), 'sheet');
+  const sheetSurface = addSurface(sheet, document.getElementById('ink'), 'sheet', null);
   grain.addEventListener('load', () => {
     sheetSurface.pattern = null;
     redraw(sheetSurface);
   });
-  document.querySelectorAll('.clip').forEach((clip) => {
-    const canvas = document.createElement('canvas');
-    canvas.className = 'ink-layer';
-    canvas.setAttribute('aria-hidden', 'true');
-    clip.appendChild(canvas);
-    addSurface(clip, canvas, 'clip');
+  const stuck = [
+    ['.clip', PRINTOUT],
+    ['.card', PRINTOUT],
+    ['.postit', (s) => getComputedStyle(s.el).backgroundColor],
+    ['.tag.big', stickerPaper],
+  ];
+  stuck.forEach(([selector, material]) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      const canvas = document.createElement('canvas');
+      canvas.className = 'ink-layer';
+      canvas.setAttribute('aria-hidden', 'true');
+      el.appendChild(canvas);
+      addSurface(el, canvas, 'stuck', material);
+    });
   });
   const pointer = sheetSurface.canvas; // the sheet's canvas receives all drawing input
 
   function surfaceAt(clientX, clientY) {
     for (const s of surfaces) {
-      if (s.kind !== 'clip') continue;
+      if (s.kind !== 'stuck') continue;
       const r = s.el.getBoundingClientRect();
       if (clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) return s;
     }
@@ -177,7 +213,22 @@ export function createInk(sheet) {
       eraseListeners.forEach((fn) => fn(ev.clientX, ev.clientY));
       if (inHole(ev.clientX, ev.clientY)) return; // that spot has its own eraser logic
     }
-    current.points.push(pointOn(current.surface, ev.clientX, ev.clientY));
+    const surface = surfaceAt(ev.clientX, ev.clientY);
+    if (surface !== current.surface) {
+      // crossed an edge: finish the piece on the old surface, start one on the new,
+      // both reaching this point so the line stays continuous until the paper moves
+      current.points.push(pointOn(current.surface, ev.clientX, ev.clientY));
+      finishPiece();
+      current = { tool: current.tool, pressure: current.pressure, surface, points: [] };
+    }
+    current.points.push(pointOn(surface, ev.clientX, ev.clientY));
+  }
+
+  function finishPiece() {
+    const done = current;
+    if (done.points.length > 1) strokes.push(done);
+    strokes = strokes.slice(-MAX_STROKES);
+    redraw(done.surface);
   }
 
   function onDown(ev) {
@@ -197,11 +248,8 @@ export function createInk(sheet) {
 
   function onUp() {
     if (!current) return;
-    const done = current;
+    finishPiece();
     current = null;
-    if (done.points.length > 1) strokes.push(done);
-    strokes = strokes.slice(-MAX_STROKES);
-    redraw(done.surface);
   }
 
   function undo() {

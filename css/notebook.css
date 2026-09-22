@@ -299,7 +299,7 @@ h2 .handwriting path { fill: none; stroke: var(--marker-blue); stroke-linecap: r
 .clip:hover { transform: perspective(1100px) rotateX(var(--rx, 1.5deg)) rotateY(var(--ry, -1deg)) translateY(-5px) !important; z-index: 5; box-shadow: 0 16px 30px var(--shadow), 0 2px 3px rgba(0,0,0,.12); }
 .clip:hover .tape { transform: scaleX(1.06) rotate(-3deg); }
 .tape { transition: transform .35s ease-out; }
-.clip canvas.ink-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+.clip canvas.ink-layer, .postit canvas.ink-layer, .card canvas.ink-layer, .tag.big canvas.ink-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
 .sheet.drawing .clip, .sheet.drawing .clip:hover { transform: none !important; transition: none; }
 @media (prefers-reduced-motion: reduce) { .clip:hover { transform: none !important; } }
 .tag.big { position: relative; }
