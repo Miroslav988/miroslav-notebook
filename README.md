@@ -11,8 +11,6 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
   Allen V. Hershey's 1967 plotter font, public domain), so each letter is a set of pen paths rather than
   an outline. As a heading scrolls into view a pencil travels those paths at a steady speed and the line
   appears behind its tip, hopping between strokes; then the sketched underline draws itself.
-- **Paper that lifts.** Taped-in printouts tilt towards the pointer as if you were about to peel them off;
-  the sticker's corner curls on hover.
 - **Drawing layer.** The pencil case in the corner is real: pencil, two markers, a highlighter and an
   eraser. Strokes are smoothed with quadratic curves, support pen pressure and coalesced pointer events,
   and are stored in fractions of the page width so a drawing survives a resize. Nothing is saved.
@@ -47,7 +45,6 @@ js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
 js/handwriting.js   the pencil that writes the headings
 js/hershey.js       stroke-font data for the characters the page uses
-js/paper.js         printouts that lift towards the pointer
 ```
 
 ## Run locally

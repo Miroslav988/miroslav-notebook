@@ -294,15 +294,13 @@ h2 .handwriting path { fill: none; stroke: var(--marker-blue); stroke-linecap: r
 .nib.show { opacity: 1; }
 .nib.lift { transition: transform .45s ease-in, opacity .45s; transform: translate(0, 0) !important; opacity: 0; }
 
-/* ---------- paper that lifts ---------- */
-.clip { transform-style: preserve-3d; transition: transform .35s ease-out, box-shadow .35s ease-out; }
-.clip:hover { transform: perspective(1100px) rotateX(var(--rx, 1.5deg)) rotateY(var(--ry, -1deg)) translateY(-5px) !important; z-index: 5; }
-.clip:hover .tape { transform: scaleX(1.06) rotate(-3deg); }
-.tape { transition: transform .35s ease-out; }
+/* ---------- printouts react to the pointer with their shadow only: anything
+   drawn over them with the pencil case has to stay put, so the paper does not move ---------- */
+.clip { transition: box-shadow .3s ease-out; }
+.clip:hover { box-shadow: 0 14px 28px var(--shadow), 0 2px 3px rgba(0,0,0,.12); }
 .tag.big { position: relative; }
 .tag.big::after { content: ""; position: absolute; right: 0; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 0; border-color: transparent; transition: border-width .3s ease-out; }
 .tag.big:hover::after { border-width: 0 0 26px 26px; border-color: transparent transparent #f5f1e6 #e2ddd0; box-shadow: -3px -3px 6px rgba(0,0,0,.15); }
-@media (prefers-reduced-motion: reduce) { .clip:hover { transform: none !important; } }
 
 /* REPL mode: the LCD fits the drawing plus two lines on every screen size */
 .device .lcd.repl { height: auto; }
