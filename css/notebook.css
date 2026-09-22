@@ -214,7 +214,8 @@
 
 /* ---------- not in the CV ---------- */
   .route { width: 100%; max-width: 760px; height: auto; display: block; margin: 4px 0 14px; overflow: visible; }
-  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 44px; }
+  .facts { columns: 2; column-gap: 44px; }
+  .facts p { break-inside: avoid; margin: 0 0 12px; }
   .facts p { font-size: 21px; }
   .facts b { color: var(--marker-blue); font-weight: 600; }
   .lcd canvas.game { display: block; height: 100%; width: auto; max-width: 100%; margin: 0 auto; }
@@ -255,7 +256,7 @@
     body { font-size: 20px; padding: 12px 8px 110px; }
     .sheet { padding: 40px 18px 44px 46px; }
     .sheet::before { left: 34px; } .sheet::after { left: 8px; }
-    .stack-list { columns: 1; } .notes, .facts { grid-template-columns: 1fr; }
+    .stack-list { columns: 1; } .notes { grid-template-columns: 1fr; } .facts { columns: 1; }
     .postit { width: 100%; min-height: 0; }
     .tag.big .top { font-size: 46px; padding: 16px 12px 12px; }
     .intro, .intro .big-line { font-size: 23px; }
