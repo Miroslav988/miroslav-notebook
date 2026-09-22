@@ -7,6 +7,15 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## What's on the page
 
+- **The intro writes itself.** On load the first two paragraphs are re-set as SVG from the real glyph
+  outlines of Caveat (the font file is parsed in the browser with opentype.js), wrapped to the paragraph
+  width using the font's own advance widths. Each glyph is traced by a pen nib, then filled. If the font
+  or the parser fails, the plain text simply stays.
+- **A desk lamp.** The light follows the pointer (or the phone's tilt), and everything on the paper casts
+  its shadow away from it: printouts, the sticker, sticky notes, the terminal, the pencil. The paper is
+  a touch brighter under the lamp.
+- **Paper that lifts.** Taped-in printouts tilt towards the pointer as if you were about to peel them off;
+  the sticker's corner curls on hover.
 - **Drawing layer.** The pencil case in the corner is real: pencil, two markers, a highlighter and an
   eraser. Strokes are smoothed with quadratic curves, support pen pressure and coalesced pointer events,
   and are stored in fractions of the page width so a drawing survives a resize. Nothing is saved.
@@ -25,7 +34,8 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
 
 ## Stack
 
-Plain HTML, CSS and ES modules. No framework, no build step, no dependencies beyond Google Fonts.
+Plain HTML, CSS and ES modules. No framework, no build step. The only third-party code is opentype.js,
+loaded from a CDN for the handwriting; the page works without it.
 
 ```
 index.html          markup
@@ -39,6 +49,10 @@ js/lisp.js          the Lisp: reader, evaluator, builtins, turtle
 js/repl.js          the `lisp` command: REPL mode and the turtle canvas
 js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
+js/handwriting.js   the intro written glyph by glyph from the font's outlines
+js/lamp.js          the desk lamp: light position → shadow vectors
+js/paper.js         printouts that lift towards the pointer
+fonts/              Caveat (SIL Open Font License), parsed at runtime
 ```
 
 ## Run locally
