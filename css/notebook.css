@@ -176,7 +176,7 @@
   .sheet.drawing .item { pointer-events: none; }
   .item svg { display: block; }
   .item.pencil { right: 5%; top: 2570px; }
-  .item.clip { right: -18px; top: -26px; }
+  .item.paperclip { right: -18px; top: -26px; }
   .item.ruler { left: 58%; top: 3230px; }
   .item.eraser { right: 10%; bottom: 250px; }
 
@@ -260,7 +260,7 @@
     .tag.big .top { font-size: 46px; padding: 16px 12px 12px; }
     .intro, .intro .big-line { font-size: 23px; }
     .card { transform: none; } .stamp { right: 8px; top: -18px; }
-    .item.ruler, .item.clip, .doodle, .stain { display: none; } .item.pencil { top: 790px; right: -4px; } .item.eraser { right: 6%; bottom: 120px; }
+    .item.ruler, .item.paperclip, .doodle, .stain { display: none; } .item.pencil { top: 790px; right: -4px; } .item.eraser { right: 6%; bottom: 120px; }
     .device { transform: none; padding: 12px; } .device .keys { grid-template-columns: repeat(4, 1fr); }
     .device .keys.game { grid-template-columns: 1fr 1fr auto 1fr 1fr; gap: 8px; max-width: none; }
     .device .keys.game .quit { width: 72px; height: 40px; font-size: 13px; } .device .lcd, .device input { font-size: 20px; } .device .lcd { height: 240px; }
@@ -295,15 +295,13 @@ h2 .handwriting path.ink { animation: trace 120ms linear forwards, inkfill 120ms
 .nib.lift { transition: transform .45s ease-in, opacity .45s; transform: translate(0, 0) !important; opacity: 0; }
 
 /* ---------- the desk lamp ---------- */
-.lamp-glow { position: absolute; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: soft-light;
-  background: radial-gradient(520px 420px at var(--lx, 70%) var(--ly, 10%), rgba(255,250,230,.95), rgba(255,246,220,.35) 45%, rgba(0,0,0,.18) 100%); }
+.lamp-glow { position: absolute; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: soft-light; will-change: background-position;
+  background: radial-gradient(640px 520px at var(--lx, 70%) var(--ly, 10%), rgba(255,248,225,.42), rgba(255,246,220,.12) 50%, rgba(0,0,0,.08) 100%); }
 html.lamp .clip { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow), 0 1px 2px rgba(0,0,0,.1); }
 html.lamp .tag.big { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow), 0 0 0 1px rgba(0,0,0,.05); }
 html.lamp .postit { box-shadow: var(--sx, 4px) var(--sy, 10px) var(--sd, 16px) var(--shadow); }
 html.lamp .card { box-shadow: var(--sx, 0) var(--sy, 10px) var(--sd, 22px) var(--shadow); }
 html.lamp .device { box-shadow: var(--sx, 0) var(--sy, 16px) calc(var(--sd, 30px) + 8px) rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 0 rgba(0,0,0,.4); }
-html.lamp .item { filter: drop-shadow(var(--sx, 0) var(--sy, 6px) 6px rgba(30,20,5,.35)); }
-html.lamp .clip, html.lamp .tag.big, html.lamp .postit, html.lamp .card, html.lamp .device { transition: box-shadow .35s ease-out; }
 
 /* ---------- paper that lifts ---------- */
 .clip { transform-style: preserve-3d; transition: transform .35s ease-out, box-shadow .35s ease-out; }
