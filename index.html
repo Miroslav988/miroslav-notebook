@@ -273,6 +273,7 @@
     <div class="notes">
       <div>
         <p><b>On security.</b> <mark class="g">I keep my own cybersecurity wiki</mark> and use it when I build auth, access control and deployments. I constantly form theories about how the app could be broken, then test them. "What can go wrong when this runs" is part of the design.</p>
+        <p><b>On the night it got tested.</b> An automated attack hit Renairo at <mark class="circled">about 1,000 requests a second</mark>, probing for .env files and anything else that smelled like a secret. Nothing leaked: secrets were never in the image or the repo, rate limits were already there, the load balancer took the burst and <mark class="u-blue">the product stayed up</mark>. I still read the logs afterwards and tightened two rules. That is what the wiki is for.</p>
         <p><b>On AI tools.</b> Use them all day, <mark class="u-double">review everything</mark>. They like to leak server env vars to the client with a public prefix, or open all ports both ways "for debugging".</p>
       </div>
       <div>
@@ -314,6 +315,6 @@
 </div>
 <div class="hint" id="hint"></div>
 
-<script type="module" src="js/main.js?v=20260922131707"></script>
+<script type="module" src="js/main.js?v=20260922143622"></script>
 </body>
 </html>

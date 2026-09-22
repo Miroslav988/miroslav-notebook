@@ -41,6 +41,7 @@ const RESPONSES = {
     'production RAG pipelines shipped ........ 2',
     'parsers and scrapers written ........... 70+',
     'largest single commit ......... 11k lines',
+    'attack held without downtime ..... ~1000 rps',
     'sites broken into, responsibly disclosed  7',
     'bench press ......................... 125kg',
   ],
@@ -78,7 +79,14 @@ const RESPONSES = {
     'laptop 2  windows',
     'monitor, coffee, a book, a paper notebook (this page is that notebook)',
   ],
-  story: ['stories: story leak | story scraper | story blame | story disks'],
+  story: ['stories: story leak | story scraper | story blame | story disks | story attack'],
+  'story attack': [
+    'Renairo got hit at ~1000 rps: a bot probing for .env files and anything',
+    'that looked like a secret. Nothing leaked: secrets were never in the image',
+    'or the repo, rate limits were on, the balancer took the burst, the product',
+    'stayed up. Read the logs after, tightened two rules. That is what the wiki',
+    'is for.',
+  ],
   'story leak': [
     'A container leaked memory slowly for days. No per-container metrics, so',
     'nobody saw it until it got killed under load. Fixed the leak, then fixed',
