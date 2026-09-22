@@ -115,6 +115,7 @@ export function initSecret(ink) {
   }
 
   ink.onErase(eraseAt);
+  ink.keepFromEraser(canvas);
   new ResizeObserver(draw).observe(canvas);
   draw();
 }

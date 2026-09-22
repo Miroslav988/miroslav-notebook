@@ -13,7 +13,11 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
   appears behind its tip, hopping between strokes; then the sketched underline draws itself.
 - **Drawing layer.** The pencil case in the corner is real: pencil, two markers, a highlighter and an
   eraser. Strokes are smoothed with quadratic curves, support pen pressure and coalesced pointer events,
-  and are stored in fractions of the page width so a drawing survives a resize. Nothing is saved.
+  and are stored in fractions of their surface's width so a drawing survives a resize. Every taped-in
+  printout has its own layer, so ink drawn on one moves with it. The eraser paints paper back over
+  anything under it, so text and doodles can be rubbed out too. Nothing is saved.
+- **Paper that lifts.** Printouts tilt towards the pointer as if you were about to peel them off; the
+  paper stays flat while a tool is in hand.
 - **Desk objects.** The pencil, eraser, paper clip and ruler on the page can be dragged and thrown.
   Velocity is estimated from the last few pointer samples; the objects slide with friction and bounce
   off the sheet's edges.
@@ -43,6 +47,7 @@ js/lisp.js          the Lisp: reader, evaluator, builtins, turtle
 js/repl.js          the `lisp` command: REPL mode and the turtle canvas
 js/secret.js        the scribbled-over word
 js/sketch.js        draw-in animations and hand-drawn strokes
+js/paper.js         printouts that lift towards the pointer
 js/handwriting.js   the pencil that writes the headings
 js/hershey.js       stroke-font data for the characters the page uses
 ```

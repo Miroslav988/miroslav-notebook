@@ -1,9 +1,14 @@
 /**
- * Drawing layer: a full-page canvas over the sheet plus the pencil case.
+ * Drawing layer and pencil case.
  *
- * Strokes are stored in fractions of the sheet width so a drawing survives a
- * resize. Nothing is persisted: this is a landing page, not the visitor's
- * notebook.
+ * There is one drawing surface over the sheet and one over every taped-in
+ * printout. A stroke belongs to the surface it started on, so ink drawn on a
+ * printout moves with that printout. Strokes are stored in fractions of their
+ * surface's width and survive a resize. Nothing is persisted.
+ *
+ * The eraser is a real eraser: it paints paper back over whatever is under it,
+ * ruled paper on the sheet, plain paper on a printout, so text, doodles and
+ * drawings alike can be rubbed out.
  */
 
 const TOOLS = {
@@ -11,7 +16,7 @@ const TOOLS = {
   pen: { color: '#2857c9', width: 3.4, composite: 'source-over', jitter: 0 },
   red: { color: '#d3372b', width: 3.4, composite: 'source-over', jitter: 0 },
   hl: { color: 'rgba(255,233,77,.55)', width: 22, composite: 'multiply', jitter: 0 },
-  eraser: { color: '#000', width: 26, composite: 'destination-out', jitter: 0 },
+  eraser: { paper: true, width: 30, composite: 'source-over', jitter: 0 },
 };
 
 const HINTS = {
@@ -19,67 +24,98 @@ const HINTS = {
   pen: 'Blue marker. Esc to put it back.',
   red: 'Red marker. Esc to put it back.',
   hl: 'Highlighter. Try it on a sentence.',
-  eraser: 'Eraser. Z undoes the last stroke.',
+  eraser: 'Eraser. It rubs out anything: text, drawings, the lot. Z undoes.',
 };
 
 const SHORTCUTS = { 1: 'pencil', 2: 'pen', 3: 'red', 4: 'hl', 5: 'eraser' };
-const MAX_STROKES = 400;
+const MAX_STROKES = 600;
 const BASE_WIDTH = 960;
 
+// the sheet's ruling, so the eraser can paint it back
+const PAPER = { color: '#f5f1e6', line: '#c3cfdb', lineEvery: 32, lineAt: 13, margin: '#d98b86', marginX: 62 };
+const PRINTOUT = '#fffdf7';
+
 export function createInk(sheet) {
-  const canvas = document.getElementById('ink');
-  const ctx = canvas.getContext('2d');
   const buttons = [...document.querySelectorAll('.tool[data-tool]')];
   const hint = document.getElementById('hint');
-
+  const surfaces = [];
   let strokes = [];
   let current = null;
   let tool = null;
-  let dpr = 1;
   let hintTimer = 0;
   const eraseListeners = [];
+  const eraserHoles = [];
 
-  function showHint(text, ms = 2600) {
-    hint.textContent = text;
-    hint.classList.add('show');
-    clearTimeout(hintTimer);
-    hintTimer = setTimeout(() => hint.classList.remove('show'), ms);
+  // ---- surfaces -------------------------------------------------------
+
+  function addSurface(el, canvas, kind) {
+    const s = { el, canvas, kind, ctx: canvas.getContext('2d'), dpr: 1, pattern: null };
+    surfaces.push(s);
+    new ResizeObserver(() => resize(s)).observe(el);
+    resize(s);
+    return s;
   }
 
-  function resize() {
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    const w = sheet.clientWidth;
-    const h = sheet.clientHeight;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-    redraw();
+  function resize(s) {
+    s.dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = s.el.clientWidth;
+    const h = s.el.clientHeight;
+    s.canvas.width = Math.round(w * s.dpr);
+    s.canvas.height = Math.round(h * s.dpr);
+    s.canvas.style.width = `${w}px`;
+    s.canvas.style.height = `${h}px`;
+    s.pattern = null;
+    redraw(s);
   }
 
-  function redraw() {
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const w = sheet.clientWidth;
-    strokes.forEach((stroke) => paint(stroke, w));
-    if (current) paint(current, w);
+  /** What the eraser paints: ruled paper aligned with the sheet, or plain printout paper. */
+  function paperFill(s) {
+    if (s.kind !== 'sheet') return PRINTOUT;
+    if (s.pattern) return s.pattern;
+    const tile = document.createElement('canvas');
+    const w = s.el.clientWidth;
+    tile.width = Math.round(w * s.dpr);
+    tile.height = Math.round(PAPER.lineEvery * s.dpr);
+    const c = tile.getContext('2d');
+    c.scale(s.dpr, s.dpr);
+    c.fillStyle = PAPER.color;
+    c.fillRect(0, 0, w, PAPER.lineEvery);
+    c.fillStyle = PAPER.line;
+    c.fillRect(0, PAPER.lineAt, w, 1);
+    c.fillStyle = PAPER.margin;
+    c.globalAlpha = 0.8;
+    c.fillRect(PAPER.marginX, 0, 2, PAPER.lineEvery);
+    s.pattern = s.ctx.createPattern(tile, 'repeat');
+    // pattern space is device pixels; scale it back to css pixels
+    const m = new DOMMatrix().scale(1 / s.dpr);
+    s.pattern.setTransform(m);
+    return s.pattern;
+  }
+
+  function redraw(s) {
+    const { ctx } = s;
+    ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+    ctx.clearRect(0, 0, s.canvas.width, s.canvas.height);
+    const w = s.el.clientWidth;
+    strokes.forEach((stroke) => stroke.surface === s && paint(stroke, w));
+    if (current && current.surface === s) paint(current, w);
   }
 
   function paint(stroke, w) {
     const t = TOOLS[stroke.tool];
+    const { ctx } = stroke.surface;
     if (!t || stroke.points.length < 2) return;
     ctx.globalCompositeOperation = t.composite;
-    ctx.strokeStyle = t.color;
+    ctx.strokeStyle = t.paper ? paperFill(stroke.surface) : t.color;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.lineWidth = t.width * stroke.pressure * (w / BASE_WIDTH);
+    const scale = stroke.surface.kind === 'sheet' ? w / BASE_WIDTH : 1;
+    ctx.lineWidth = t.width * stroke.pressure * scale;
     const p = stroke.points.map(([x, y]) => [x * w, y * w]);
     ctx.beginPath();
     ctx.moveTo(p[0][0], p[0][1]);
     for (let i = 1; i < p.length - 1; i++) {
-      const mx = (p[i][0] + p[i + 1][0]) / 2;
-      const my = (p[i][1] + p[i + 1][1]) / 2;
-      ctx.quadraticCurveTo(p[i][0], p[i][1], mx, my);
+      ctx.quadraticCurveTo(p[i][0], p[i][1], (p[i][0] + p[i + 1][0]) / 2, (p[i][1] + p[i + 1][1]) / 2);
     }
     const last = p[p.length - 1];
     ctx.lineTo(last[0], last[1]);
@@ -87,58 +123,90 @@ export function createInk(sheet) {
     ctx.globalCompositeOperation = 'source-over';
   }
 
-  // offsetX/Y are relative to the canvas and already account for scroll and
-  // transforms; the sheet's bounding box does not.
-  function pointAt(ev) {
-    const r = canvas.getBoundingClientRect();
-    const t = TOOLS[tool];
-    const jitter = t && t.jitter ? (Math.random() - 0.5) * t.jitter : 0;
-    const local = ev.target === canvas && typeof ev.offsetX === 'number';
-    const x = local ? ev.offsetX : ev.clientX - r.left;
-    const y = local ? ev.offsetY : ev.clientY - r.top;
-    return [(x + jitter) / r.width, (y + jitter) / r.width];
+  // ---- input ----------------------------------------------------------
+
+  const sheetSurface = addSurface(sheet, document.getElementById('ink'), 'sheet');
+  document.querySelectorAll('.clip').forEach((clip) => {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'ink-layer';
+    canvas.setAttribute('aria-hidden', 'true');
+    clip.appendChild(canvas);
+    addSurface(clip, canvas, 'clip');
+  });
+  const pointer = sheetSurface.canvas; // the sheet's canvas receives all drawing input
+
+  function surfaceAt(clientX, clientY) {
+    for (const s of surfaces) {
+      if (s.kind !== 'clip') continue;
+      const r = s.el.getBoundingClientRect();
+      if (clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) return s;
+    }
+    return sheetSurface;
   }
 
-  function coalesced(ev) {
-    return ev.getCoalescedEvents ? ev.getCoalescedEvents() : [ev];
+  function pointOn(s, clientX, clientY) {
+    const r = s.el.getBoundingClientRect();
+    const t = TOOLS[tool];
+    const jitter = t && t.jitter ? (Math.random() - 0.5) * t.jitter : 0;
+    return [(clientX - r.left + jitter) / r.width, (clientY - r.top + jitter) / r.width];
+  }
+
+  function inHole(clientX, clientY) {
+    return eraserHoles.some((el) => {
+      const r = el.getBoundingClientRect();
+      return clientX >= r.left - 16 && clientX <= r.right + 16 && clientY >= r.top - 16 && clientY <= r.bottom + 16;
+    });
+  }
+
+  function addPoint(ev) {
+    if (tool === 'eraser') {
+      eraseListeners.forEach((fn) => fn(ev.clientX, ev.clientY));
+      if (inHole(ev.clientX, ev.clientY)) return; // that spot has its own eraser logic
+    }
+    current.points.push(pointOn(current.surface, ev.clientX, ev.clientY));
   }
 
   function onDown(ev) {
     if (!tool) return;
-    canvas.setPointerCapture(ev.pointerId);
+    pointer.setPointerCapture(ev.pointerId);
     const pressure = ev.pressure && ev.pressure !== 0.5 ? 0.6 + ev.pressure : 1;
-    current = { tool, pressure, points: [pointAt(ev)] };
-    if (tool === 'eraser') eraseListeners.forEach((fn) => fn(ev.clientX, ev.clientY));
+    current = { tool, pressure, surface: surfaceAt(ev.clientX, ev.clientY), points: [] };
+    addPoint(ev);
     ev.preventDefault();
   }
 
   function onMove(ev) {
     if (!current) return;
-    for (const e of coalesced(ev)) {
-      current.points.push(pointAt(e));
-      if (tool === 'eraser') eraseListeners.forEach((fn) => fn(e.clientX, e.clientY));
-    }
-    redraw();
+    for (const e of ev.getCoalescedEvents ? ev.getCoalescedEvents() : [ev]) addPoint(e);
+    redraw(current.surface);
   }
 
   function onUp() {
     if (!current) return;
-    if (current.points.length > 1) strokes.push(current);
-    strokes = strokes.slice(-MAX_STROKES);
+    const done = current;
     current = null;
-    redraw();
+    if (done.points.length > 1) strokes.push(done);
+    strokes = strokes.slice(-MAX_STROKES);
+    redraw(done.surface);
   }
 
   function undo() {
-    strokes.pop();
-    redraw();
+    const last = strokes.pop();
+    if (last) redraw(last.surface);
   }
 
   function clear() {
     if (!strokes.length) return;
     strokes = [];
-    redraw();
+    surfaces.forEach(redraw);
     showHint('Page wiped clean.');
+  }
+
+  function showHint(text, ms = 2600) {
+    hint.textContent = text;
+    hint.classList.add('show');
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(() => hint.classList.remove('show'), ms);
   }
 
   function setTool(name) {
@@ -148,10 +216,10 @@ export function createInk(sheet) {
     showHint(tool ? HINTS[tool] : 'Tools away. Links and desk objects work again.');
   }
 
-  canvas.addEventListener('pointerdown', onDown);
-  canvas.addEventListener('pointermove', onMove);
-  canvas.addEventListener('pointerup', onUp);
-  canvas.addEventListener('pointercancel', onUp);
+  pointer.addEventListener('pointerdown', onDown);
+  pointer.addEventListener('pointermove', onMove);
+  pointer.addEventListener('pointerup', onUp);
+  pointer.addEventListener('pointercancel', onUp);
   buttons.forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool)));
   document.getElementById('undo').addEventListener('click', undo);
   document.getElementById('clear').addEventListener('click', clear);
@@ -173,16 +241,18 @@ export function createInk(sheet) {
     if (!open && tool) setTool(tool);
   });
 
-  new ResizeObserver(resize).observe(sheet);
-  resize();
-
   return {
     get tool() {
       return tool;
     },
     showHint,
+    /** Called with the pointer position for every eraser sample. */
     onErase(fn) {
       eraseListeners.push(fn);
+    },
+    /** An element the eraser must not paint over (it handles erasing itself). */
+    keepFromEraser(el) {
+      eraserHoles.push(el);
     },
   };
 }
