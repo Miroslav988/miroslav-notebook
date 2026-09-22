@@ -25,7 +25,7 @@
     --desk: #4a4540;
   }
   * { box-sizing: border-box; }
-  html { background: var(--desk); }
+  html { background: var(--desk); overflow-x: hidden; overflow-x: clip; } /* the writing pencil may poke past the edge; the page must not scroll sideways for it */
   body {
     margin: 0; color: var(--graphite);
     font-family: "Caveat", "Patrick Hand", "Comic Sans MS", cursive;
@@ -287,7 +287,8 @@
 .device { position: relative; z-index: 21; }
 
 /* ---------- headings written by a pencil ---------- */
-h2 .handwriting { display: inline-block; vertical-align: baseline; height: 1.3em; width: auto; overflow: visible; }
+h2.writing { max-width: 100%; }
+h2 .handwriting { display: block; max-width: 100%; height: auto; overflow: visible; }
 h2 .handwriting path { fill: none; stroke: var(--marker-blue); stroke-linecap: round; stroke-linejoin: round; }
 .nib { position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none; opacity: 0; transition: opacity .2s; transform-origin: 4px 13px; filter: drop-shadow(0 6px 6px rgba(30,20,5,.35)); }
 .nib svg { display: block; }
