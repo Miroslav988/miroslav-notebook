@@ -240,7 +240,7 @@
   .secret-note small { font-size: 16px; color: var(--graphite-soft); }
 
 /* ---------- margin notes and doodles ---------- */
-  .doodle { position: absolute; pointer-events: none; color: var(--graphite-soft); font-size: 19px; line-height: 1.15; z-index: 6; }
+  .doodle { position: absolute; pointer-events: none; color: var(--graphite-soft); font-size: 19px; line-height: 1.15; z-index: 1; }
   .doodle svg { display: block; overflow: visible; }
   .doodle.txt { max-width: 190px; }
   .doodle.red { color: var(--sticker-red); }
@@ -300,6 +300,9 @@ h2 .handwriting path { fill: none; stroke: var(--marker-blue); stroke-linecap: r
 .clip:hover .tape { transform: scaleX(1.06) rotate(-3deg); }
 .tape { transition: transform .35s ease-out; }
 .clip canvas.ink-layer, .postit canvas.ink-layer, .card canvas.ink-layer, .tag.big canvas.ink-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+.sheet > canvas.sheet-ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+/* everything stuck onto the sheet sits above the sheet's ink and carries its own */
+.clip, .postit, .card, .tag.big { position: relative; z-index: 3; }
 .sheet.drawing .clip, .sheet.drawing .clip:hover { transform: none !important; transition: none; }
 @media (prefers-reduced-motion: reduce) { .clip:hover { transform: none !important; } }
 .tag.big { position: relative; }

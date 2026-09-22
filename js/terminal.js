@@ -39,6 +39,9 @@ const RESPONSES = {
     'years shipping ........................ 4+',
     'companies, one of them my own ........... 3',
     'production RAG pipelines shipped ........ 2',
+    'parsers and scrapers written ........... 70+',
+    'largest single commit ......... 11k lines',
+    'sites broken into, responsibly disclosed  7',
     'bench press ......................... 125kg',
   ],
   contact: [

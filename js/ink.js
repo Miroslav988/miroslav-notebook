@@ -163,7 +163,14 @@ export function createInk(sheet) {
 
   // ---- input ----------------------------------------------------------
 
-  const sheetSurface = addSurface(sheet, document.getElementById('ink'), 'sheet', null);
+  // The sheet's own ink lives on a canvas *under* everything stuck to the page,
+  // so erasing near a printout's edge never paints ruled paper over the printout.
+  // Pointer input is captured by the transparent #ink canvas on top of it all.
+  const sheetCanvas = document.createElement('canvas');
+  sheetCanvas.className = 'ink-layer sheet-ink';
+  sheetCanvas.setAttribute('aria-hidden', 'true');
+  sheet.prepend(sheetCanvas);
+  const sheetSurface = addSurface(sheet, sheetCanvas, 'sheet', null);
   grain.addEventListener('load', () => {
     sheetSurface.pattern = null;
     redraw(sheetSurface);
@@ -183,7 +190,7 @@ export function createInk(sheet) {
       addSurface(el, canvas, 'stuck', material);
     });
   });
-  const pointer = sheetSurface.canvas; // the sheet's canvas receives all drawing input
+  const pointer = document.getElementById('ink'); // transparent, on top: receives all drawing input
 
   function surfaceAt(clientX, clientY) {
     for (const s of surfaces) {
@@ -215,9 +222,7 @@ export function createInk(sheet) {
     }
     const surface = surfaceAt(ev.clientX, ev.clientY);
     if (surface !== current.surface) {
-      // crossed an edge: finish the piece on the old surface, start one on the new,
-      // both reaching this point so the line stays continuous until the paper moves
-      current.points.push(pointOn(current.surface, ev.clientX, ev.clientY));
+      // crossed an edge: the piece on the old surface ends here, a new one starts on the new
       finishPiece();
       current = { tool: current.tool, pressure: current.pressure, surface, points: [] };
     }
