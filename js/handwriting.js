@@ -12,7 +12,7 @@
 
 const FONT_URL = 'fonts/PermanentMarker-Regular.ttf';
 const PARSER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js';
-const GLYPH_MS = 150; // pace: one letter every 150 ms
+const GLYPH_MS = 90; // pace: one letter every 90 ms
 let clipCounter = 0;
 
 function loadScript(src) {
