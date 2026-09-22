@@ -255,7 +255,7 @@
     .tag.big .top { font-size: 46px; padding: 16px 12px 12px; }
     .intro, .intro .big-line { font-size: 23px; }
     .card { transform: none; } .stamp { right: 8px; top: -18px; }
-    .item.ruler, .item.clip, .doodle, .stain { display: none; } .item.pencil { top: 520px; right: 2%; } .item.eraser { right: 6%; bottom: 120px; }
+    .item.ruler, .item.clip, .doodle, .stain { display: none; } .item.pencil { top: 640px; right: -4px; } .item.eraser { right: 6%; bottom: 120px; }
     .device { transform: none; padding: 12px; } .device .keys { grid-template-columns: repeat(4, 1fr); }
     .device .keys.game { grid-template-columns: 1fr 1fr auto 1fr 1fr; gap: 8px; max-width: none; }
     .device .keys.game .quit { width: 72px; height: 40px; font-size: 13px; } .device .lcd, .device input { font-size: 20px; } .device .lcd { height: 240px; }
