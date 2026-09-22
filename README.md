@@ -24,9 +24,6 @@ margins, hand-drawn charts, a pocket terminal, and a few things you can only fin
   the LCD: `(repeat 36 (fd 90) (rt 170))`, `(demo tree)` for a recursive tree.
 - **Charts and doodles drawn in.** SVG strokes are measured at load and animated as the reader scrolls
   to them. Doodles get a pencil-wobble filter and a second, fainter stroke so they don't read as icons.
-- **Ink that flows.** The inkwell in the pencil case drops real fluid on the paper: Jos Stam's Stable
-  Fluids solver (diffusion, semi-Lagrangian advection, pressure projection) running on a small grid per
-  drop, at 60 fps on the CPU. Drag through it to stir; it dries into a stain.
 - **The egg.** Find it, erase it, type it.
 
 ## Stack
@@ -39,7 +36,6 @@ css/notebook.css    styles
 js/main.js          wires the modules together
 js/cover.js         the notebook cover that opens on load
 js/ink.js           drawing layer and pencil case
-js/fluid.js         ink as a fluid: the Stable Fluids solver, one tile per drop
 js/desk.js          draggable desk objects
 js/terminal.js      pocket terminal and its commands
 js/egg.js           the hidden game
